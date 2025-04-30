@@ -42,3 +42,19 @@ Table.Body = function (props: TableBodyProps) {
     <tbody className="divide-y divide-gray-200">{children}</tbody>
   )
 }
+
+interface TableRowProps extends React.PropsWithChildren {}
+
+Table.Row = function (props: TableRowProps) {
+  const { children } = props
+
+  return <tr className="hover:bg-gray-50">{children}</tr>
+}
+
+interface TableCellProps extends React.PropsWithChildren {}
+
+Table.Cell = function (props: TableCellProps) {
+  const { children } = props
+
+  return <td className="py-4 px-6 whitespace-nowrap">{children}</td>
+}

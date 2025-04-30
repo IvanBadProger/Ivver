@@ -13,6 +13,7 @@ interface FormProps
   onSubmit: (data: any) => void
   children: FormFieldElement[] | FormFieldElement
   defaultValues?: Record<string, any>
+  heading?: string
 }
 
 interface FormFieldElement extends ReactElement {
@@ -23,7 +24,14 @@ interface FormFieldElement extends ReactElement {
 }
 
 export const Form = (props: FormProps) => {
-  const { schema, children, onSubmit, defaultValues, ...rest } = props
+  const {
+    heading,
+    schema,
+    children,
+    onSubmit,
+    defaultValues,
+    ...rest
+  } = props
 
   const {
     register,
@@ -37,23 +45,28 @@ export const Form = (props: FormProps) => {
 
   return (
     <form
-      className="max-w-md mx-auto my-10 p-6 border border-gray-300 rounded-lg shadow-md flex flex-col gap-y-4"
+      className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md "
       onSubmit={handleSubmit(onSubmit)}
       {...rest}
     >
-      {React.Children.map(children, (child: FormFieldElement) => {
-        const name = child.props.name
-        return name
-          ? React.createElement(child.type, {
-              ...{
-                ...child.props,
-                ...register(name),
-                key: name,
-                errorMessage: errors[name]?.message,
-              },
-            })
-          : child
-      })}
+      <fieldset className="flex flex-col gap-y-4">
+        <legend className="text-xl mb-8 text-gray-900 text-center">
+          {heading}
+        </legend>
+        {React.Children.map(children, (child: FormFieldElement) => {
+          const name = child.props.name
+          return name
+            ? React.createElement(child.type, {
+                ...{
+                  ...child.props,
+                  ...register(name),
+                  key: name,
+                  errorMessage: errors[name]?.message,
+                },
+              })
+            : child
+        })}
+      </fieldset>
     </form>
   )
 }

@@ -1,25 +1,7 @@
 import { useId } from "react"
+import { FileInputIcon } from "./icons"
 
 type FileInputProps = {}
-
-export const FileInputIcon = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.5"
-      stroke="currentColor"
-      className="h-6 w-6 text-gray-500"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-      />
-    </svg>
-  )
-}
 
 export const FileInput = (props: FileInputProps) => {
   const {} = props
@@ -40,12 +22,9 @@ export const FileInput = (props: FileInputProps) => {
             <FileInputIcon />
           </div>
           <div className="text-gray-600">
-            <a
-              href="#"
-              className="font-medium text-primary-500 hover:text-primary-700"
-            >
+            <span className="font-medium text-primary-500 hover:text-primary-700">
               Click to upload
-            </a>{" "}
+            </span>
             or drag and drop
           </div>
           <p className="text-sm text-gray-500">

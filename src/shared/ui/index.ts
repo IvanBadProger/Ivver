@@ -7,8 +7,13 @@ import { Input } from "./Input"
 import { Select, Option } from "./Select"
 import { TextArea } from "./TextArea"
 import { Table } from "./Table"
+import { Header } from "./Header"
+import { Footer } from "./Footer"
+import { Modal } from "./Modal/Modal"
+import { useModal } from "./Modal/useModal"
 
 export {
+  useModal,
   Badge,
   Button,
   Table,
@@ -18,6 +23,9 @@ export {
   Input,
   Select,
   TextArea,
+  Modal,
+  Footer,
+  Header,
 }
 
 export type { Option }
