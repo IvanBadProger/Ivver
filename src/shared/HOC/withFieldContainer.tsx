@@ -5,6 +5,7 @@ export interface FieldContainerProps {
   label: string
   isLabelHidden?: boolean
   errorMessage?: string
+  wrapperClassName?: string
 }
 
 interface FieldProps {
@@ -20,19 +21,25 @@ export const withFieldContainer = <P extends FieldProps>(
   return function WithFieldContainer(
     props: Omit<P, keyof FieldContainerProps> & FieldContainerProps
   ) {
-    const { label, errorMessage, required, isLabelHidden, ...rest } =
-      props
+    const {
+      label,
+      errorMessage,
+      required,
+      isLabelHidden,
+      wrapperClassName,
+      ...rest
+    } = props
 
     const inputId = useId()
     const errorId = useId()
     const hintId = useId()
 
     return (
-      <div>
+      <div className={wrapperClassName}>
         {label && (
           <label
             className={clsx(
-              "mb-1 block text-sm font-medium text-gray-700",
+              "mb-2 block text-sm font-medium text-gray-700",
               {
                 "after:ml-0.5 after:text-red-500 after:content-['*']":
                   required,
