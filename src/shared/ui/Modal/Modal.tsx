@@ -1,9 +1,8 @@
 "use client"
-
-import { Button } from "@/shared/ui"
+import { Button, Title } from "@/shared/ui/"
 import clsx from "clsx"
 import { forwardRef, useId } from "react"
-import { CrossIcon } from "../icons"
+import { X } from "lucide-react"
 
 interface ModalProps {
   label: string
@@ -44,22 +43,23 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(
         {...rest}
       >
         <div className="py-6 px-8 ">
-          <header className="flex justify-between items-center mb-4">
-            <h2
-              className={clsx("text-2xl font-bold", {
+          <header className="flex justify-between items-center gap-x-4 mb-4">
+            <Title
+              size="sm"
+              className={clsx("", {
                 "sr-only": isLabelHidden,
               })}
               id={labelId}
             >
               {label}
-            </h2>
+            </Title>
             <Button
               className="p-2! shadow-none! ml-auto"
               label="Закрыть модальное окно"
               mode="ghost"
               onClick={onClose}
             >
-              <CrossIcon />
+              <X />
             </Button>
           </header>
           {children}
@@ -68,3 +68,5 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(
     )
   }
 )
+
+Modal.displayName = "Modal"

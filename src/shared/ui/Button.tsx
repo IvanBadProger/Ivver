@@ -29,7 +29,7 @@ export function Button(props: ButtonProps) {
   }[mode]
 
   const baseStyles =
-    "rounded-lg border px-5 py-2.5 text-center text-sm font-medium shadow-sm transition-all focus:ring focus:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-70 cursor-pointer"
+    "rounded-lg border px-5 py-2.5 flex items-center justify-center gap-2 font-medium shadow-sm transition-all focus:ring focus:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-70 cursor-pointer"
 
   return (
     <button
