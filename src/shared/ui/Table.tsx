@@ -1,23 +1,31 @@
-import { Product } from "@/components/Product"
+import clsx from "clsx"
+import { HTMLAttributes } from "react"
 
-interface TableProps
-  extends React.TableHTMLAttributes<HTMLTableElement> {}
+type TableProps = React.TableHTMLAttributes<HTMLTableElement>
 
-export const Table = (props: TableProps) => {
-  const { children, ...rest } = props
+function Table(props: TableProps) {
+  const { children, className, ...rest } = props
 
-  return <table {...rest}>{children}</table>
+  return (
+    <table
+      className={clsx("divide-y divide-gray-200", className)}
+      {...rest}
+    >
+      {children}
+    </table>
+  )
 }
 
 interface TableHeaderProps {
   columns: string[]
+  className?: string
 }
 
 Table.Header = (props: TableHeaderProps) => {
-  const { columns } = props
+  const { columns, className } = props
 
   return (
-    <thead className="bg-gray-50">
+    <thead className={clsx("bg-gray-50", className)}>
       <tr>
         {columns.map((c) => (
           <th
@@ -33,28 +41,50 @@ Table.Header = (props: TableHeaderProps) => {
   )
 }
 
-interface TableBodyProps extends React.PropsWithChildren {}
+interface TableBodyProps extends React.PropsWithChildren {
+  className?: string
+}
 
 Table.Body = function (props: TableBodyProps) {
-  const { children } = props
+  const { children, className } = props
 
   return (
-    <tbody className="divide-y divide-gray-200">{children}</tbody>
+    <tbody className={clsx("divide-y divide-gray-200", className)}>
+      {children}
+    </tbody>
   )
 }
 
-interface TableRowProps extends React.PropsWithChildren {}
+interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {}
 
 Table.Row = function (props: TableRowProps) {
-  const { children } = props
+  const { children, className, ...rest } = props
 
-  return <tr className="hover:bg-gray-50">{children}</tr>
+  return (
+    <tr className={clsx("hover:bg-gray-50", className)} {...rest}>
+      {children}
+    </tr>
+  )
 }
 
-interface TableCellProps extends React.PropsWithChildren {}
+interface TableCellProps extends React.PropsWithChildren {
+  className?: string
+}
 
 Table.Cell = function (props: TableCellProps) {
-  const { children } = props
+  const { children, className } = props
 
-  return <td className="py-4 px-6 whitespace-nowrap">{children}</td>
+  return (
+    <td className={clsx("py-4 px-6 whitespace-nowrap", className)}>
+      {children}
+    </td>
+  )
 }
+
+// fix: typescript не видит свойство displayName, хотя оно работает. Я нипон
+Table.Header.displayName = "Table-Header"
+Table.Body.displayName = "Table-body"
+Table.Row.displayName = "Table-row"
+Table.Cell.displayName = "Table-cell"
+
+export { Table }

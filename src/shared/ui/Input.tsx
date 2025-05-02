@@ -12,6 +12,7 @@ const InputBase = (props: InputBaseProps) => {
         "block w-full rounded-md border-gray-300 shadow-sm px-4 py-2",
         "focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50",
         "disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500",
+        "placeholder:text-xs",
         "aria-[invalid=true]:border-red-300",
         className
       )}
