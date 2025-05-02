@@ -1,16 +1,43 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-50: #f8fafc;
-  --color-primary-100: #f0f4f8;
-  --color-primary-200: #ddebf3;
-  --color-primary-300: #bcdcea;
-  --color-primary-400: #9acbe0;
-  --color-primary-500: #7bbad3;
-  --color-primary-600: #62a6ca;
-  --color-primary-700: #4e93bd;
-  --color-primary-800: #3a80af;
-  --color-primary-900: #2b6ea2;
+  --color-primary-50: #f2f9f6;
+  --color-primary-100: #e3f3ed;
+  --color-primary-200: #c7e6db;
+  --color-primary-300: #98d1bc;
+  --color-primary-400: #64b69a;
+  --color-primary-500: #3d9d7c;
+  --color-primary-600: #2c7d62;
+  --color-primary-700: #266752;
+  --color-primary-800: #225244;
+  --color-primary-900: #1d443a;
+
+  --color-secondary-50: #fff5f2;
+  --color-secondary-100: #ffe9e2;
+  --color-secondary-200: #ffd3c5;
+  --color-secondary-300: #ffb4a1;
+  --color-secondary-400: #ff8670;
+  --color-secondary-500: #ff5c3f;
+  --color-secondary-600: #ed4528;
+  --color-secondary-700: #c63520;
+  --color-secondary-800: #a42e1f;
+  --color-secondary-900: #8c2a1e;
+}
+
+html {
+  font-size: 18px;
+}
+
+@media (max-width: 1200px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 767px) {
+  html {
+    font-size: 14px;
+  }
 }
 
 body {
