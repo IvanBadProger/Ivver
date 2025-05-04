@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Nunito_Sans } from "next/font/google"
 import "./globals.css"
 import { Footer, Header } from "@/widgets"
+import clsx from "clsx"
 
 const nunitoSans = Nunito_Sans({
   variable: "--font-nunito-sans",
@@ -31,10 +32,13 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body
-        className={`${nunitoSans.variable} antialiased flex flex-col min-h-screen`}
+        className={clsx(
+          nunitoSans.variable,
+          "antialiased flex flex-col min-h-screen overflow-x-hidden"
+        )}
       >
         <Header />
-        <main className="shrink grow">{children}</main>
+        <main className="shrink grow my-8">{children}</main>
         <Footer />
       </body>
     </html>
