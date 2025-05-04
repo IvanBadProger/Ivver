@@ -2,7 +2,7 @@ import { z } from "zod"
 
 export const CategorySchema = z.object({
   id: z.string().nonempty(),
-  name: z.string().nonempty(),
+  name: z.string().nonempty("Название обязательно"),
   description: z.string().optional(),
   created_at: z.string().datetime(),
   updated_at: z.string().datetime(),
@@ -16,3 +16,4 @@ export const CategoryFormSchema = CategorySchema.pick({
 })
 
 export type CategoryDTO = z.infer<typeof CategoryFormSchema>
+export type WithId<T> = T & { id: string }

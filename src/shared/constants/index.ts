@@ -1,3 +1,5 @@
+import { API, getEndpoint } from "./api"
+
 export const CONTACTS = {
   PHONE: "+70000000000",
   PHONE_LINK: function () {
@@ -15,3 +17,5 @@ export const ROUTES = {
   AUTH: "/admin/auth",
   DASHBOARD: "/admin/dashboard",
 } as const
+
+export { API, getEndpoint }

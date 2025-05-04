@@ -1,30 +1,36 @@
-import { Category } from "./types"
+import { API, getEndpoint } from "@/shared/constants"
+import { Category, CategoryDTO } from "./types"
 
 export const getCategories = async (): Promise<Category[]> => {
-  return [
+  const res = await fetch(
+    getEndpoint(API.ENDPOINTS.CATEGORIES.GET_ALL)
+  )
+  const data = await res.json()
+
+  return data ?? []
+}
+
+export const updateCategory = async (
+  id: string,
+  payload: CategoryDTO
+) => {
+  const res = await fetch(
+    getEndpoint(API.ENDPOINTS.CATEGORIES.UPDATE(id), true),
+    { method: "PATCH", headers: {}, body: JSON.stringify(payload) }
+  )
+  return await res.json()
+}
+
+export const addCategory = async (data: CategoryDTO) => {
+  const res = await fetch(
+    getEndpoint(API.ENDPOINTS.CATEGORIES.ADD, true),
     {
-      id: "1",
-      created_at: "29:03",
-      updated_at: "50:43",
-      name: "category-1",
-    },
-    {
-      id: "2",
-      created_at: "29:03",
-      updated_at: "50:43",
-      name: "category-2",
-    },
-    {
-      id: "3",
-      created_at: "29:03",
-      updated_at: "50:43",
-      name: "category-3",
-    },
-    {
-      id: "4",
-      created_at: "29:03",
-      updated_at: "50:43",
-      name: "category-4",
-    },
-  ]
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify(data),
+    }
+  )
+  return await res.json()
 }
