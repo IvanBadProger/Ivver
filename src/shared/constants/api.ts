@@ -11,7 +11,7 @@ export const API = {
       GET_ALL: (category?: string) =>
         category ? `products?category=${category}` : "products",
       GET_BY_ID: (id: string) => `products/show/${id}`,
-      ADD: (id: string) => `products/add/${id}`,
+      ADD: `products/add/`,
     },
   },
 } as const
