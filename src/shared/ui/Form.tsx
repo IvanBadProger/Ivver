@@ -1,5 +1,4 @@
 "use client"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import React, { ReactElement } from "react"
 import { z, ZodSchema } from "zod"
@@ -32,16 +31,21 @@ export const Form = (props: FormProps) => {
     defaultValues,
     ...rest
   } = props
-
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<z.infer<typeof schema>>({
     mode: "onBlur",
     resolver: zodResolver(schema),
-    defaultValues: defaultValues,
   })
+
+  if (defaultValues) {
+    Object.entries(defaultValues).forEach((entry) => {
+      setValue(entry["0"], entry["1"])
+    })
+  }
 
   return (
     <form
@@ -57,12 +61,10 @@ export const Form = (props: FormProps) => {
           const name = child.props.name
           return name
             ? React.createElement(child.type, {
-                ...{
-                  ...child.props,
-                  ...register(name),
-                  key: name,
-                  errorMessage: errors[name]?.message,
-                },
+                ...child.props,
+                ...register(name),
+                key: name,
+                errorMessage: errors[name]?.message,
               })
             : child
         })}
