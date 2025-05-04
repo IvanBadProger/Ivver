@@ -9,13 +9,19 @@ type ProductRowProps = {
 
 export const ProductRow = (props: ProductRowProps) => {
   const {
-    product: { category, id, name, price, unit },
+    product: {
+      category_id: category,
+      id,
+      name,
+      price,
+      measurement_unit_id: unit,
+    },
     openEditModal,
   } = props
 
   const onClick = (id: string) => {
-    console.log("click " + id)
     openEditModal()
+    console.log(id)
   }
 
   return (
@@ -24,7 +30,6 @@ export const ProductRow = (props: ProductRowProps) => {
       title={`Редактировать товар: ${name}`}
       onClick={() => onClick(id)}
     >
-      <Table.Cell>{id}</Table.Cell>
       <Table.Cell>{name}</Table.Cell>
       <Table.Cell>{category}</Table.Cell>
       <Table.Cell>{price} руб</Table.Cell>

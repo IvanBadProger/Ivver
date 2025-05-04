@@ -5,9 +5,8 @@ import { ProductRow } from "./ProductRow"
 import { ProductForm } from "./ProductForm"
 
 const tableHeadCols: string[] = [
-  "id",
-  "Категория",
   "Название",
+  "Категория",
   "Цена",
   "Единица измерения",
 ]
@@ -23,7 +22,7 @@ export const ProductTable = (props: ProductTableProps) => {
 
   return (
     <>
-      <Table>
+      <Table className="w-full">
         <Table.Header columns={tableHeadCols} />
         <Table.Body>
           {products.map((product) => (

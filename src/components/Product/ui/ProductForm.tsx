@@ -1,6 +1,8 @@
 "use client"
+import { CategorySelect } from "@/components/Category"
+import { addProduct } from "../api"
 import { ProductDTO, ProductDTOSchema } from "../types"
-import { Input, TextArea, Form, FileInput } from "@/shared/ui"
+import { Input, TextArea, Form, Button } from "@/shared/ui"
 
 interface ProductFormProps {
   isEdit?: boolean
@@ -12,8 +14,11 @@ export const ProductForm = (props: ProductFormProps) => {
     ? "Редактирование продукта"
     : "Создание продукта"
 
-  const onSubmit = (data: ProductDTO) => {
+  const onSubmit = async (data: ProductDTO) => {
     console.log(data)
+    const res = await addProduct(data)
+
+    console.log(res)
   }
 
   return (
@@ -23,12 +28,12 @@ export const ProductForm = (props: ProductFormProps) => {
       schema={ProductDTOSchema}
     >
       <Input name="name" label="Название" />
-      <TextArea label="Описание" />
-      {/* fix: текущий компонент клиентский - значит все дочерние тоже. А селект категорий - делает запрос к апи. Как решить? */}
-      {/* <CategorySelect /> */}
-      <Input name="price" label="Цена" type="number" step={100} />
-      <Input name="unit" label="Единица измерения" />
-      <FileInput />
+      <TextArea label="Описание" name="description" />
+      <CategorySelect name="category_id" />
+      <Input name="price" label="Цена" />
+      {/* <Input name="measurement_unit_id" label="Единица измерения" /> */}
+      {/* <FileInput /> */}
+      <Button type="submit">Добавить</Button>
     </Form>
   )
 }
