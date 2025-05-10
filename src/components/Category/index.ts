@@ -9,6 +9,9 @@ import {
   Category,
   CategoryDTO,
 } from "./types"
+import { ButtonCreateCategory } from "./ui/ButtonCreateCategory"
+import { CategoriesTableContainer } from "./ui/CategoriesTableContainer"
+import { CategoryRow } from "./ui/CategoryRow"
 
 export {
   CategorySelect,
@@ -18,5 +21,8 @@ export {
   getCategories,
   CategoryTable,
   CategoryMenu,
+  ButtonCreateCategory,
+  CategoriesTableContainer,
+  CategoryRow,
 }
 export type { Category, CategoryDTO }

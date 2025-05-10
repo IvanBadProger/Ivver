@@ -15,7 +15,7 @@ export const Slider = ({
   slides,
   ariaLabel = "Слайдер изображений",
 }: SliderProps) => {
-  const sliderRef = useRef<HTMLElement>(null)
+  const sliderRef = useRef<HTMLDivElement>(null)
   const {
     currentSlide,
     isAnimating,
@@ -40,7 +40,7 @@ export const Slider = ({
   )
 
   return (
-    <section
+    <div
       ref={sliderRef}
       className="relative w-full max-w-[1200px] mx-auto overflow-hidden"
       role="region"
@@ -94,6 +94,6 @@ export const Slider = ({
       </nav>
 
       <ProgressBar progress={progress} />
-    </section>
+    </div>
   )
 }

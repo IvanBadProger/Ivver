@@ -62,7 +62,6 @@ export const AdminNavigation = () => {
 export const ClientNavigation = () => {
   return (
     <>
-      <NavLink href={ROUTES.CATEGORIES}>Категории</NavLink>
       <NavLink href={ROUTES.HOME}>Главная</NavLink>
     </>
   )

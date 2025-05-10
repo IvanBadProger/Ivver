@@ -2,12 +2,14 @@
 import { Table } from "@/shared/ui"
 import { CategoryDTO, WithId } from "../types"
 
-type CategoryRowProps = WithId<CategoryDTO> & {
+type CategoryRowProps = {
   onClick: (category: WithId<CategoryDTO>) => void
+  data: WithId<CategoryDTO>
 }
 
 export const CategoryRow = (props: CategoryRowProps) => {
-  const { name, description, onClick, id } = props
+  const { data, onClick } = props
+  const { id, name, description } = data
 
   return (
     <Table.Row

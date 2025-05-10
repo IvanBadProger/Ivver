@@ -14,12 +14,10 @@ export const ProductSchema = z.object({
   name: z.string().trim().nonempty("Это поле обязательно"),
   description: z.string().trim().optional(),
   category_id: z.string().nonempty(),
-  category: z
-    .object({
-      id: z.string().nonempty(),
-      name: z.string().nonempty(),
-    })
-    .optional(),
+  category: z.object({
+    id: z.string().nonempty(),
+    name: z.string().nonempty(),
+  }),
   price: z.string(),
   images: z.array(z.string()).optional(),
   measurement_unit_id: z.string().optional(),
@@ -43,6 +41,7 @@ export const ProductDTOSchema = ProductSchema.pick({
   measurement_unit_id: true,
   // specifications: true,
   price: true,
+  images: true,
 })
 
 export type ProductDTO = z.infer<typeof ProductDTOSchema>

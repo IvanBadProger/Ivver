@@ -3,7 +3,8 @@ import { Category, CategoryDTO } from "./types"
 
 export const getCategories = async (): Promise<Category[]> => {
   const res = await fetch(
-    getEndpoint(API.ENDPOINTS.CATEGORIES.GET_ALL)
+    getEndpoint(API.ENDPOINTS.CATEGORIES.GET_ALL),
+    { cache: "force-cache" }
   )
   const data = await res.json()
 
@@ -18,6 +19,7 @@ export const updateCategory = async (
     getEndpoint(API.ENDPOINTS.CATEGORIES.UPDATE(id), true),
     { method: "PATCH", headers: {}, body: JSON.stringify(payload) }
   )
+
   return await res.json()
 }
 
@@ -32,5 +34,6 @@ export const addCategory = async (data: CategoryDTO) => {
       body: JSON.stringify(data),
     }
   )
+
   return await res.json()
 }

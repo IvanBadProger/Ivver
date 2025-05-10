@@ -2,18 +2,12 @@ import { Badge, Title } from "@/shared/ui"
 import { ProductDTO } from "../types"
 import Image from "next/image"
 import Link from "next/link"
+import { WithId } from "@/components/Category/types"
 
-type ProductCardProps = ProductDTO
+type ProductCardProps = WithId<ProductDTO>
 
 export const ProductCard = (props: ProductCardProps) => {
-  const {
-    category_id: category,
-    description,
-    name,
-    price,
-    images,
-  } = props
-  const id = 1
+  const { id, category, description, name, price, images } = props
 
   return (
     <article className="group relative overflow-hidden rounded-xl bg-white p-4 shadow-lg transition-all hover:shadow-xl max-w-[30vw] cursor-pointer">
@@ -33,7 +27,7 @@ export const ProductCard = (props: ProductCardProps) => {
           ))}
         </div>
 
-        <Badge text={category} className="mb-2" />
+        <Badge text={category?.name} className="mb-2" />
 
         <Title size="lg" className="my-2 text-gray-900 line-clamp-4">
           {name}

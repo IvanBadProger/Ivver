@@ -7,20 +7,22 @@ interface CategoryFormProps {
   isEdit?: boolean
   category?: WithId<CategoryDTO>
 }
-// fix: про cache почитать
+
 export const CategoryForm = (props: CategoryFormProps) => {
   const { isEdit = false, category } = props
 
-  // fix: при isEdit прокинем defaultValues
   const heading = isEdit
     ? "Редактирование категории"
     : "Создание категории"
 
   const onSubmit = async (data: CategoryDTO) => {
     if (isEdit && category?.id) {
-      console.log(await updateCategory(category?.id, data))
+      console.log(
+        "update: ",
+        await updateCategory(category?.id, data)
+      )
     } else {
-      console.log(await addCategory(data))
+      console.log("add: ", await addCategory(data))
     }
   }
 
@@ -35,7 +37,9 @@ export const CategoryForm = (props: CategoryFormProps) => {
         {/* fix: если указать неправльный name не сработает */}
         <Input label="Название" name="name" />
         <TextArea label="Описание" name="description" />
-        <Button type="submit">Создать</Button>
+        <Button type="submit">
+          {isEdit ? "Редактировать" : "Создать"}
+        </Button>
       </Form>
     </>
   )

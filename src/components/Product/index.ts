@@ -9,14 +9,16 @@ import {
   Product,
   ProductDTO,
 } from "./types"
+import { ProductTableContainer } from "./ui/ProductTableContainer"
 
 export {
-  ProductDTOSchema as ProductFormSchema,
+  ProductDTOSchema,
   ProductSchema,
   ProductCard,
   getProducts,
   ProductList,
   ProductTable,
   ButtonCreateProduct,
+  ProductTableContainer,
 }
 export type { Product, ProductDTO }

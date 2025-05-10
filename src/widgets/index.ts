@@ -3,7 +3,7 @@ import { Footer } from "./Footer"
 import { Header } from "./Header"
 import { Loading } from "./Loading"
 import { MenuItem } from "./MenuItem"
-import { Sidebar } from "lucide-react"
+import { Sidebar } from "./Sidebar"
 import { Slider } from "./Slider/Slider"
 import { Slide } from "./Slider/Slide"
 

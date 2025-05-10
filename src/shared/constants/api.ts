@@ -12,6 +12,7 @@ export const API = {
         category ? `products?category=${category}` : "products",
       GET_BY_ID: (id: string) => `products/show/${id}`,
       ADD: `products/add/`,
+      UPDATE: (id: string) => `products/update//${id}`,
     },
   },
 } as const

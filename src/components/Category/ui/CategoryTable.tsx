@@ -11,28 +11,31 @@ type CategoryTableProps = {
 
 export const CategoryTable = ({ categories }: CategoryTableProps) => {
   const { openModal, dialogRef } = useModal()
-  const [categoryState, setCategoryState] =
+  const [selectedCategory, setSelectedCategory] =
     useState<WithId<CategoryDTO>>()
+
+  const onClick = (category: WithId<CategoryDTO>) => {
+    setSelectedCategory(category)
+    openModal()
+  }
 
   return (
     <>
       <Table className="w-full">
         <Table.Header columns={["Название", "Описание"]} />
         <Table.Body>
-          {categories.map((category, index) => (
+          {categories.map((category) => (
             <CategoryRow
-              onClick={(category) => {
-                setCategoryState(category)
-                openModal()
-              }}
-              key={index}
-              {...category}
+              onClick={onClick}
+              key={category.id}
+              data={category}
             />
           ))}
         </Table.Body>
       </Table>
+
       <Modal ref={dialogRef} label="Редактирование категории">
-        <CategoryForm isEdit category={categoryState} />
+        <CategoryForm isEdit category={selectedCategory} />
       </Modal>
     </>
   )

@@ -13,7 +13,6 @@ export const CONTACTS = {
 
 export const ROUTES = {
   HOME: "/",
-  CATEGORIES: "/categories",
   AUTH: "/admin/auth",
   DASHBOARD: "/admin/dashboard",
 } as const

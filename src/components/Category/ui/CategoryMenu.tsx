@@ -1,17 +1,13 @@
-"use client"
 import { Menu, MenuItem } from "@/widgets"
 import { Category } from "../types"
-import { useSearchParams } from "next/navigation"
 
 type CategoryMenuProps = {
   categories: Category[]
+  activeCategory: string
 }
 
 export const CategoryMenu = (props: CategoryMenuProps) => {
-  const { categories } = props
-
-  const params = useSearchParams()
-  const activeCategory = params.get("category") ?? "all"
+  const { categories, activeCategory } = props
 
   // fix: надо как-то переработать этот момент
   const menuItems = categories.map(
@@ -24,5 +20,18 @@ export const CategoryMenu = (props: CategoryMenuProps) => {
       })
   )
 
-  return <Menu menuItems={menuItems} activeValue={activeCategory} />
+  return (
+    <Menu
+      menuItems={[
+        new MenuItem({
+          value: "all",
+          label: "Все",
+          paramName: "category",
+          pathname: "",
+        }),
+        ...menuItems,
+      ]}
+      activeValue={activeCategory}
+    />
+  )
 }
