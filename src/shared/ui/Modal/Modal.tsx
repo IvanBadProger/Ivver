@@ -1,7 +1,7 @@
 "use client"
 import { Button, Title } from "@/shared/ui/"
 import clsx from "clsx"
-import { forwardRef, useId } from "react"
+import { forwardRef, useId, useCallback, useRef } from "react"
 import { X } from "lucide-react"
 
 interface ModalProps {
@@ -13,22 +13,29 @@ interface ModalProps {
 export const Modal = forwardRef<HTMLDialogElement, ModalProps>(
   (props, ref) => {
     const { children, isLabelHidden, label, ...rest } = props
-
     const labelId = useId()
+    const isMouseDownOnBackdrop = useRef(false)
 
-    const onClose = () => {
+    const onClose = useCallback(() => {
       if (ref && typeof ref !== "function") {
         ref.current?.close()
       }
+    }, [ref])
+
+    const onMouseDown = (event: React.MouseEvent) => {
+      const { currentTarget: dialogElement, target } = event
+      isMouseDownOnBackdrop.current = dialogElement === target
     }
 
-    const onBackdropClick = (event: React.MouseEvent) => {
+    const onMouseUp = (event: React.MouseEvent) => {
       const { currentTarget: dialogElement, target } = event
-      const isClickedOnBackDrop = dialogElement === target
+      const isMouseUpOnBackdrop = dialogElement === target
 
-      if (isClickedOnBackDrop) {
+      if (isMouseUpOnBackdrop && isMouseDownOnBackdrop.current) {
         onClose()
       }
+
+      isMouseDownOnBackdrop.current = false
     }
 
     return (
@@ -39,7 +46,8 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(
         )}
         ref={ref}
         aria-labelledby={labelId}
-        onClick={onBackdropClick}
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
         {...rest}
       >
         <div className="py-6 px-8 ">

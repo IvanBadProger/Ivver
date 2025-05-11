@@ -1,5 +1,5 @@
-import { ClientSidebar } from "@/components/ClientSidebar"
 import { getProducts, ProductList } from "@/components/Product"
+import { ClientSidebar } from "@/components/Product/ClientSidebar"
 
 type Props = {
   searchParams: Promise<{ category: string }>

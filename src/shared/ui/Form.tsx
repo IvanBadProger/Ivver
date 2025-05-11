@@ -5,7 +5,7 @@ import { z, ZodSchema } from "zod"
 import { FieldContainerProps } from "../HOC/withFieldContainer"
 import { useForm } from "react-hook-form"
 
-// fix: типизацию поправить
+// fix: типизацию поправить так чтобы: не возникло других проблем с типизацией, убрать все any, в data, defaultValues были только поля из schema. Убрать костыли и соответствоввать солид и чистому коду
 interface FormProps
   extends React.FormHTMLAttributes<HTMLFormElement> {
   schema: ZodSchema

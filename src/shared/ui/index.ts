@@ -1,29 +1,12 @@
-import { Form } from "./Form"
-import { Badge } from "./Badge"
-import { Button } from "./Button"
-import { Checkbox } from "./Checkbox"
-import { FileInput } from "./FileInput"
-import { Input } from "./Input"
-import { Select, Option } from "./Select"
-import { TextArea } from "./TextArea"
-import { Table } from "./Table"
-import { Modal } from "./Modal/Modal"
-import { useModal } from "./Modal/useModal"
-import { Title } from "./Title"
-
-export {
-  useModal,
-  Badge,
-  Button,
-  Table,
-  Checkbox,
-  FileInput,
-  Form,
-  Input,
-  Select,
-  TextArea,
-  Modal,
-  Title,
-}
-
-export type { Option }
+export { Form } from "./Form"
+export { Badge } from "./Badge"
+export { Button } from "./Button"
+export { FileInput } from "./FileInput"
+export { Input } from "./Input"
+export { Select } from "./Select"
+export type { Option } from "./Select"
+export { TextArea } from "./TextArea"
+export { Table } from "./Table"
+export { Modal } from "./Modal/Modal"
+export { useModal } from "./Modal/useModal"
+export { Title } from "./Title"

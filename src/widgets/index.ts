@@ -1,19 +1,8 @@
-import { Menu } from "./Menu"
-import { Footer } from "./Footer"
-import { Header } from "./Header"
-import { Loading } from "./Loading"
-import { MenuItem } from "./MenuItem"
-import { Sidebar } from "./Sidebar"
-import { Slider } from "./Slider/Slider"
-import { Slide } from "./Slider/Slide"
-
-export {
-  Header,
-  Footer,
-  Loading,
-  Menu,
-  MenuItem,
-  Sidebar,
-  Slide,
-  Slider,
-}
+export { Menu } from "./Menu"
+export { Footer } from "./Footer"
+export { Header } from "./Header"
+export { Loading } from "./Loading"
+export { MenuItem } from "./MenuItem"
+export { Sidebar } from "./Sidebar"
+export { Slider } from "./Slider/Slider"
+export { Slide } from "./Slider/Slide"
