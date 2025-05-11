@@ -1,3 +1,1 @@
-import { withFieldContainer } from "./withFieldContainer"
-
-export { withFieldContainer }
+export { withFieldContainer } from "./withFieldContainer"

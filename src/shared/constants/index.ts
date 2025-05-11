@@ -1,4 +1,4 @@
-import { API, getEndpoint } from "./api"
+export { API, getEndpoint } from "./api"
 
 export const CONTACTS = {
   PHONE: "+70000000000",
@@ -11,10 +11,8 @@ export const CONTACTS = {
   },
 } as const
 
-export const ROUTES = {
-  HOME: "/",
-  AUTH: "/admin/auth",
-  DASHBOARD: "/admin/dashboard",
-} as const
-
-export { API, getEndpoint }
+export enum ROUTES {
+  HOME = "/",
+  AUTH = "/admin/auth",
+  DASHBOARD = "/admin/dashboard",
+}

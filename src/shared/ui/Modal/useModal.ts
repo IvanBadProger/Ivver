@@ -1,5 +1,5 @@
 "use client"
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 
 export const useModal = () => {
   const dialogRef = useRef<HTMLDialogElement>(null)
@@ -11,6 +11,17 @@ export const useModal = () => {
   const closeModal = () => {
     dialogRef.current?.close()
   }
+
+  useEffect(() => {
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeModal()
+      }
+    }
+    document.addEventListener("keydown", handleEscKey)
+
+    return () => document.removeEventListener("keydown", handleEscKey)
+  }, [])
 
   return {
     openModal,

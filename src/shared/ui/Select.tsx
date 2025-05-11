@@ -1,19 +1,27 @@
+import clsx from "clsx"
 import { withFieldContainer } from "../HOC/withFieldContainer"
 
 export type Option = { value: string; name: string }
 
-type SelectBaseProps = {
+interface SelectBaseProps
+  extends Omit<
+    React.SelectHTMLAttributes<HTMLSelectElement>,
+    "children"
+  > {
   options: Option[]
-} & React.SelectHTMLAttributes<HTMLSelectElement>
+}
+
+const SELECT_STYLES = `
+  block w-full rounded-md
+  border-gray-300 px-4 py-2 shadow-sm
+  focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50
+  disabled:cursor-not-allowed disabled:bg-gray-50`
 
 const SelectBase = (props: SelectBaseProps) => {
-  const { options, ...rest } = props
+  const { options, className, ...rest } = props
 
   return (
-    <select
-      className="block w-full rounded-md border-gray-300 px-4 py-2 shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
-      {...rest}
-    >
+    <select className={clsx(SELECT_STYLES, className)} {...rest}>
       {options.map(({ value, name }) => (
         <option key={value + name} value={value}>
           {name}

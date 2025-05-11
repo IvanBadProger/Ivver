@@ -2,10 +2,10 @@ import clsx from "clsx"
 import { withFieldContainer } from "../HOC/withFieldContainer"
 import { forwardRef } from "react"
 
-type InputBaseProps = React.InputHTMLAttributes<HTMLInputElement>
+type InputProps = React.InputHTMLAttributes<HTMLInputElement>
 
-const InputBase = forwardRef<HTMLInputElement, InputBaseProps>(
-  (props: InputBaseProps, ref) => {
+export const InputBase = forwardRef<HTMLInputElement, InputProps>(
+  (props: InputProps, ref) => {
     const { className, ...restInputProps } = props
 
     return (
@@ -16,7 +16,7 @@ const InputBase = forwardRef<HTMLInputElement, InputBaseProps>(
           "focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50",
           "disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500",
           "placeholder:text-xs",
-          "aria-[invalid=true]:border-red-300",
+          "aria-[invalid=true]:border-red-500",
           className
         )}
         {...restInputProps}

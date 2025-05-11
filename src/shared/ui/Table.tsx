@@ -21,7 +21,7 @@ interface TableHeaderProps {
   className?: string
 }
 
-Table.Header = (props: TableHeaderProps) => {
+Table.Header = function TableHeader(props: TableHeaderProps) {
   const { columns, className } = props
 
   return (
@@ -45,7 +45,7 @@ interface TableBodyProps extends React.PropsWithChildren {
   className?: string
 }
 
-Table.Body = function (props: TableBodyProps) {
+Table.Body = function TableBody(props: TableBodyProps) {
   const { children, className } = props
 
   return (
@@ -55,9 +55,9 @@ Table.Body = function (props: TableBodyProps) {
   )
 }
 
-interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {}
-
-Table.Row = function (props: TableRowProps) {
+Table.Row = function TableRow(
+  props: HTMLAttributes<HTMLTableRowElement>
+) {
   const { children, className, ...rest } = props
 
   return (
@@ -71,7 +71,7 @@ interface TableCellProps extends React.PropsWithChildren {
   className?: string
 }
 
-Table.Cell = function (props: TableCellProps) {
+Table.Cell = function TableCell(props: TableCellProps) {
   const { children, className } = props
 
   return (
@@ -80,11 +80,5 @@ Table.Cell = function (props: TableCellProps) {
     </td>
   )
 }
-
-// fix: typescript не видит свойство displayName, хотя оно работает. Я нипон
-Table.Header.displayName = "Table-Header"
-Table.Body.displayName = "Table-body"
-Table.Row.displayName = "Table-row"
-Table.Cell.displayName = "Table-cell"
 
 export { Table }
