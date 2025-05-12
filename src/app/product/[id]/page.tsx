@@ -2,16 +2,12 @@ import { getProductById } from "@/components/Product/api"
 import { Badge, Title } from "@/shared/ui"
 import { Slider } from "@/widgets"
 import { Metadata } from "next"
+import Image from "next/image"
+import skeletonPhoto from "@/assets/no-photo-612x612.jpg"
 
 type PageProps = {
   params: Promise<{ id: string }>
 }
-
-const imagesDef = [
-  "https://images.unsplash.com/photo-1733507267128-e65b38dad170?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1745949779026-f7fdd1470f8c?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1746102268391-a17760aff398?q=80&w=1586&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-]
 
 export async function generateMetadata({
   params,
@@ -34,22 +30,31 @@ export default async function Page(props: PageProps) {
   const { params } = props
   const { id: productId } = await params
   const {
-    category_id: category,
+    category,
     description,
     id,
-    images = imagesDef,
+    images = [skeletonPhoto],
     name,
     price,
-    measurement_unit_id: unit,
+    measurement_unit: unit,
   } = await getProductById(productId)
 
   return (
     <section className="container mx-auto py-8 px-4">
       <article className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <Slider
-          ariaLabel="Галерея изображений продукта"
-          slides={images}
-        />
+        <Slider>
+          {images.map((img, index) => (
+            <Image
+              key={index}
+              src={img}
+              alt={`Слайд ${index + 1} из ${images.length}`}
+              className="w-full h-full object"
+              width={300}
+              height={300}
+              priority={index === 0}
+            />
+          ))}
+        </Slider>
 
         {/* Информация о продукте */}
         <div className="space-y-6">
@@ -58,26 +63,22 @@ export default async function Page(props: PageProps) {
               {name}
             </Title>
             <Badge
-              text={category}
+              text={category.name}
               className="bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm"
             />
           </header>
 
           <p className="text-gray-600 leading-relaxed">
-            {description}
+            {description ? description : "Здесь нет описания"}
           </p>
 
-          <dl className="space-y-2 border-t border-gray-200 pt-4">
-            <div className="flex items-center justify-between text-sm">
-              <dt className="text-gray-500">Единица измерения:</dt>
-              <dd className="font-medium text-gray-900">{unit}</dd>
-            </div>
-
+          <dl className="space-y-2 border-t border-gray-300 pt-4">
             <div className="flex items-center justify-between">
               <dt className="text-sm text-gray-500">Цена:</dt>
               <dd className="text-xl font-bold text-secondary-600">
                 <span>{price}</span>
                 <span content="RUB">&nbsp;₽</span>
+                {unit && <span>&nbsp;/ {unit.name}</span>}
               </dd>
             </div>
 
