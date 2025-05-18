@@ -4,7 +4,7 @@ import { CategoryMenu } from "./ui/CategoryMenu"
 import { CategorySelect } from "./ui/CategorySelect"
 import { CategoryTable } from "./ui/CategoryTable"
 import {
-  CategoryFormSchema,
+  CategoryDTOSchema,
   CategorySchema,
   Category,
   CategoryDTO,
@@ -16,7 +16,7 @@ import { CategoryRow } from "./ui/CategoryRow"
 export {
   CategorySelect,
   CategoryForm,
-  CategoryFormSchema,
+  CategoryDTOSchema as CategoryFormSchema,
   CategorySchema,
   getCategories,
   CategoryTable,

@@ -1,26 +1,21 @@
 "use client"
 import { Button, Title } from "@/shared/ui/"
 import clsx from "clsx"
-import { forwardRef, useId, useCallback, useRef } from "react"
+import { forwardRef, useId, useRef } from "react"
 import { X } from "lucide-react"
 
-interface ModalProps {
-  label: string
+interface ModalProps extends React.HTMLAttributes<HTMLDialogElement> {
+  label?: string
   isLabelHidden?: boolean
-  children?: React.ReactNode
+  children: React.ReactNode
+  onClose: () => void
 }
 
 export const Modal = forwardRef<HTMLDialogElement, ModalProps>(
   (props, ref) => {
-    const { children, isLabelHidden, label, ...rest } = props
+    const { children, onClose, isLabelHidden, label, ...rest } = props
     const labelId = useId()
     const isMouseDownOnBackdrop = useRef(false)
-
-    const onClose = useCallback(() => {
-      if (ref && typeof ref !== "function") {
-        ref.current?.close()
-      }
-    }, [ref])
 
     const onMouseDown = (event: React.MouseEvent) => {
       const { currentTarget: dialogElement, target } = event

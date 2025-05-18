@@ -1,9 +1,9 @@
 import { getProductById } from "@/components/Product/api"
 import { Badge, Title } from "@/shared/ui"
-import { Slider } from "@/widgets"
+import { Loading, Slider } from "@/widgets"
 import { Metadata } from "next"
 import Image from "next/image"
-import skeletonPhoto from "@/assets/no-photo-612x612.jpg"
+import { Suspense } from "react"
 
 type PageProps = {
   params: Promise<{ id: string }>
@@ -16,12 +16,12 @@ export async function generateMetadata({
   const product = await getProductById(id)
 
   return {
-    title: `${product.name} | Магазин`,
+    title: `${product.name} `,
     description: product.description,
     openGraph: {
       title: product.name,
       description: product.description,
-      images: product.images,
+      images: product.photos?.filter((img) => img.is_preview),
     },
   }
 }
@@ -33,7 +33,7 @@ export default async function Page(props: PageProps) {
     category,
     description,
     id,
-    images = [skeletonPhoto],
+    photos: images,
     name,
     price,
     measurement_unit: unit,
@@ -42,19 +42,25 @@ export default async function Page(props: PageProps) {
   return (
     <section className="container mx-auto py-8 px-4">
       <article className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <Slider>
-          {images.map((img, index) => (
-            <Image
-              key={index}
-              src={img}
-              alt={`Слайд ${index + 1} из ${images.length}`}
-              className="w-full h-full object"
-              width={300}
-              height={300}
-              priority={index === 0}
-            />
-          ))}
-        </Slider>
+        <Suspense fallback={<Loading />}>
+          {images?.length ? (
+            <Slider>
+              {images.map((img, index) => (
+                <Image
+                  key={index}
+                  src={img.url}
+                  alt={`Слайд ${index + 1} из ${images.length}`}
+                  className="w-full h-full object"
+                  width={300}
+                  height={300}
+                  priority={index === 0}
+                />
+              ))}
+            </Slider>
+          ) : (
+            <p>Нет фото продукта</p>
+          )}
+        </Suspense>
 
         {/* Информация о продукте */}
         <div className="space-y-6">

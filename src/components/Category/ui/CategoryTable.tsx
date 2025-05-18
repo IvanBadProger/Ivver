@@ -1,16 +1,17 @@
 "use client"
 import { Modal, Table, useModal } from "@/shared/ui"
-import { CategoryDTO, WithId } from "../types"
+import { CategoryDTO } from "../types"
 import { CategoryRow } from "./CategoryRow"
 import { CategoryForm } from "./CategoryForm"
 import { useState } from "react"
+import { WithId } from "@/shared/types"
 
 type CategoryTableProps = {
   categories: WithId<CategoryDTO>[]
 }
 
 export const CategoryTable = ({ categories }: CategoryTableProps) => {
-  const { openModal, dialogRef } = useModal()
+  const { openModal, dialogRef, closeModal } = useModal()
   const [selectedCategory, setSelectedCategory] =
     useState<WithId<CategoryDTO>>()
 
@@ -34,8 +35,16 @@ export const CategoryTable = ({ categories }: CategoryTableProps) => {
         </Table.Body>
       </Table>
 
-      <Modal ref={dialogRef} label="Редактирование категории">
-        <CategoryForm isEdit category={selectedCategory} />
+      <Modal
+        ref={dialogRef}
+        onClose={closeModal}
+        label="Редактирование категории"
+      >
+        <CategoryForm
+          isEdit
+          category={selectedCategory}
+          onSubmitExtra={closeModal}
+        />
       </Modal>
     </>
   )

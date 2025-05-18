@@ -1,12 +1,13 @@
 "use client"
 import { Table } from "@/shared/ui"
-import { Product } from "../types"
+import { ProductDTO } from "../types"
+import { WithId } from "@/shared/types"
 
 type ProductRowProps = {
-  onClick: (product: Omit<Product, "images" | "description">) => void
-  data: Omit<Product, "images" | "description">
+  onClick: (product: WithId<ProductDTO>) => void
+  data: WithId<ProductDTO>
 }
-
+// fix: тип data поменять
 export const ProductRow = (props: ProductRowProps) => {
   const { data, onClick } = props
   const { category, name, price, measurement_unit: unit } = data

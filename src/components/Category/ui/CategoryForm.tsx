@@ -1,15 +1,21 @@
 "use client"
 import { Input, TextArea, Form, Button } from "@/shared/ui"
-import { CategoryDTO, CategoryFormSchema, WithId } from "../types"
+import { CategoryDTO, CategoryDTOSchema } from "../types"
 import { addCategory, updateCategory } from "../api"
+import { WithId } from "@/shared/types"
+import { forwardRef } from "react"
 
 interface CategoryFormProps {
   isEdit?: boolean
   category?: WithId<CategoryDTO>
+  onSubmitExtra?: () => void
 }
 
-export const CategoryForm = (props: CategoryFormProps) => {
-  const { isEdit = false, category } = props
+export const CategoryForm = forwardRef<
+  HTMLFormElement,
+  CategoryFormProps
+>(function CategoryForm(props, ref) {
+  const { isEdit = false, category, onSubmitExtra } = props
 
   const heading = isEdit
     ? "Редактирование категории"
@@ -17,22 +23,22 @@ export const CategoryForm = (props: CategoryFormProps) => {
 
   const onSubmit = async (data: CategoryDTO) => {
     if (isEdit && category?.id) {
-      console.log(
-        "update: ",
-        await updateCategory(category?.id, data)
-      )
+      alert(await updateCategory(category.id, data))
     } else {
-      console.log("add: ", await addCategory(data))
+      alert(await addCategory(data))
     }
+
+    if (onSubmitExtra) onSubmitExtra()
   }
 
   return (
     <>
       <Form
+        ref={ref}
         heading={heading}
-        schema={CategoryFormSchema}
+        schema={CategoryDTOSchema}
         onSubmit={onSubmit}
-        defaultValues={category}
+        updatedValues={category}
       >
         {/* fix: если указать неправльный name не сработает */}
         <Input label="Название" name="name" />
@@ -43,4 +49,4 @@ export const CategoryForm = (props: CategoryFormProps) => {
       </Form>
     </>
   )
-}
+})

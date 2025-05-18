@@ -5,7 +5,9 @@ import { useEffect, useState } from "react"
 import { Category } from "../types"
 
 type CategorySelectProps =
-  React.SelectHTMLAttributes<HTMLSelectElement>
+  React.SelectHTMLAttributes<HTMLSelectElement> & {
+    errorMessage?: string
+  }
 
 // fix: убрать useEffect
 export const CategorySelect = (props: CategorySelectProps) => {

@@ -4,34 +4,32 @@ enum BaseUrls {
 }
 
 enum CategoryEndpoints {
-  GET_ALL = "categories",
+  BASE = "categories",
   ADD = "categories/add",
-  GET_BY_ID = "categories/show",
-  UPDATE = "categories/update",
 }
 
 enum ProductEndpoints {
-  GET_ALL = "products",
-  GET_BY_ID = "products/show",
+  BASE = "products",
   ADD = "products/add",
-  UPDATE = "products/update",
 }
 
 export const API = {
   categories: {
-    getAll: () => CategoryEndpoints.GET_ALL,
+    getAll: () => CategoryEndpoints.BASE,
     add: () => CategoryEndpoints.ADD,
-    getById: (id: string) => `${CategoryEndpoints.GET_BY_ID}/${id}`,
-    update: (id: string) => `${CategoryEndpoints.UPDATE}/${id}`,
+    getById: (id: string) => `${CategoryEndpoints.BASE}/${id}`,
+    update: (id: string) => `${CategoryEndpoints.BASE}/${id}/update`,
   },
   products: {
     getAll: (category?: string) =>
       category
-        ? `${ProductEndpoints.GET_ALL}?category=${category}`
-        : ProductEndpoints.GET_ALL,
-    getById: (id: string) => `${ProductEndpoints.GET_BY_ID}/${id}`,
+        ? `${ProductEndpoints.BASE}?category=${category}`
+        : ProductEndpoints.BASE,
+    getById: (id: string) => `${ProductEndpoints.BASE}/${id}`,
     add: () => ProductEndpoints.ADD,
-    update: (id: string) => `${ProductEndpoints.UPDATE}/${id}`,
+    update: (id: string) => `${ProductEndpoints.BASE}/${id}/update`,
+    uploadPhotos: (id: string) =>
+      `${ProductEndpoints.BASE}/${id}/photos/upload`,
   },
 } as const
 

@@ -1,33 +1,31 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
-import React, { ReactElement } from "react"
 import { z, ZodSchema } from "zod"
-import { FieldContainerProps } from "../HOC/withFieldContainer"
 import { useForm } from "react-hook-form"
+import React, { forwardRef } from "react"
 
-// fix: типизацию поправить так чтобы: не возникло других проблем с типизацией, убрать все any, в data, defaultValues были только поля из schema. Убрать костыли и соответствоввать солид и чистому коду
-interface FormProps
+interface FormProps<TSchema extends ZodSchema>
   extends React.FormHTMLAttributes<HTMLFormElement> {
-  schema: ZodSchema
-  onSubmit: (data: any) => void
-  children: FormFieldElement[] | FormFieldElement
-  defaultValues?: Record<string, any>
+  schema: TSchema
+  onSubmit: (data: z.TypeOf<TSchema>) => void
+  children: React.ReactElement[]
+  updatedValues?: z.TypeOf<TSchema>
+  defaultValues?: z.TypeOf<TSchema>
   heading?: string
 }
 
-interface FormFieldElement extends ReactElement {
-  props: {
-    name?: string
-    [key: string]: any
-  } & FieldContainerProps
-}
-
-export const Form = (props: FormProps) => {
+export const Form = forwardRef(function Form<
+  TSchema extends ZodSchema
+>(
+  props: FormProps<TSchema>,
+  ref: React.Ref<HTMLFormElement> | undefined
+) {
   const {
     heading,
     schema,
     children,
     onSubmit,
+    updatedValues,
     defaultValues,
     ...rest
   } = props
@@ -36,39 +34,49 @@ export const Form = (props: FormProps) => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<z.infer<typeof schema>>({
+    reset,
+  } = useForm<z.TypeOf<TSchema>>({
     mode: "onBlur",
     resolver: zodResolver(schema),
+    defaultValues,
   })
 
-  if (defaultValues) {
-    Object.entries(defaultValues).forEach((entry) => {
-      setValue(entry["0"], entry["1"])
-    })
+  if (updatedValues) {
+    for (const field in updatedValues) {
+      if (schema.shape[field]) {
+        setValue(field, updatedValues[field])
+      }
+    }
   }
 
   return (
     <form
+      ref={ref}
       className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md "
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit((data) => {
+        onSubmit(data)
+        reset()
+      })}
       {...rest}
     >
       <fieldset className="flex flex-col gap-y-4">
         <legend className="text-xl mb-8 text-gray-900 text-center">
           {heading}
         </legend>
-        {React.Children.map(children, (child: FormFieldElement) => {
-          const name = child.props.name
-          return name
-            ? React.createElement(child.type, {
-                ...child.props,
-                ...register(name),
-                key: name,
-                errorMessage: errors[name]?.message,
-              })
-            : child
+        {React.Children.map(children, (child) => {
+          if (child.props && Object.keys(child.props).length) {
+            const name: string = child.props.name ?? ""
+            return name
+              ? React.createElement(child.type, {
+                  ...child.props,
+                  ...register(name),
+                  key: name,
+                  errorMessage: errors[name]?.message,
+                })
+              : child
+          }
         })}
       </fieldset>
     </form>
   )
-}
+})

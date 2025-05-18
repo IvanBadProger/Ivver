@@ -45,3 +45,6 @@ body {
   color: black;
   font-family: --font-nunito-sans;
 }
+body:has(dialog[open]) {
+  overflow: hidden;
+}

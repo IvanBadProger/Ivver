@@ -1,5 +1,5 @@
 import { CategoryMenu, getCategories } from "@/components/Category"
-import { Sidebar } from "../widgets/Sidebar"
+import { Sidebar } from "@/widgets"
 
 type Props = {
   activeCategory: string

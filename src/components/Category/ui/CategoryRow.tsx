@@ -1,6 +1,7 @@
 "use client"
 import { Table } from "@/shared/ui"
-import { CategoryDTO, WithId } from "../types"
+import { CategoryDTO } from "../types"
+import { WithId } from "@/shared/types"
 
 type CategoryRowProps = {
   onClick: (category: WithId<CategoryDTO>) => void

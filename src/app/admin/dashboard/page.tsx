@@ -16,9 +16,7 @@ export default async function Dashboard({
 
   return (
     <div className="mx-auto p-4 bg-white shadow-md rounded-lg overflow-x-auto">
-      <Suspense fallback={<Loading />}>
-        <DashboardHeaderSwitcher tab={tab} />
-      </Suspense>
+      <DashboardHeaderSwitcher tab={tab} />
       <Suspense fallback={<Loading />}>
         <DashboardTableSwitcher tab={tab} />
       </Suspense>

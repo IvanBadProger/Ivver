@@ -1,5 +1,5 @@
 {
-  "name": "untitile",
+  "name": "ivver",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
-    "@types/swiper": "^5.4.3",
     "clsx": "^2.1.1",
     "lucide-react": "^0.503.0",
     "next": "15.3.1",
@@ -21,6 +20,7 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "@types/swiper": "^5.4.3",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",

@@ -1,9 +1,10 @@
 "use client"
-import { Product } from "../types"
+import { ProductDTO, ProductForm as TProductForm } from "../types"
 import { Modal, Table, useModal } from "@/shared/ui"
 import { ProductRow } from "./ProductRow"
 import { ProductForm } from "./ProductForm"
 import { useState } from "react"
+import { WithId } from "@/shared/types"
 
 const tableHeadCols: string[] = [
   "Название",
@@ -13,20 +14,38 @@ const tableHeadCols: string[] = [
 ]
 
 type ProductTableProps = {
-  products: Omit<Product, "images" | "description">[]
+  products: WithId<ProductDTO>[]
 }
 
 export const ProductTable = (props: ProductTableProps) => {
   const { products } = props
 
-  const { dialogRef, openModal } = useModal()
-  const [selectedProduct, setSelectedProduct] = useState<Product>()
+  const { dialogRef, openModal, closeModal } = useModal()
+  const [selectedProduct, setSelectedProduct] =
+    useState<WithId<ProductDTO>>()
 
-  const onClick = (
-    product: Omit<Product, "images" | "description">
-  ) => {
+  const onClick = (product: WithId<ProductDTO>) => {
     setSelectedProduct(product)
     openModal()
+  }
+
+  const parseToProductFormData = (
+    product?: WithId<ProductDTO>
+  ): WithId<TProductForm> | undefined => {
+    if (!product) return undefined
+
+    const { category_id, name, price, measurement_unit_id, id } =
+      product
+
+    return {
+      id,
+      category_id,
+      name,
+      price,
+      specifications: [],
+      description: "",
+      measurement_unit_id,
+    }
   }
 
   return (
@@ -44,8 +63,15 @@ export const ProductTable = (props: ProductTableProps) => {
         </Table.Body>
       </Table>
 
-      <Modal ref={dialogRef} label="Редактирование товара">
-        <ProductForm isEdit product={selectedProduct} />
+      <Modal
+        onClose={closeModal}
+        ref={dialogRef}
+        label="Редактирование товара"
+      >
+        <ProductForm
+          isEdit
+          product={parseToProductFormData(selectedProduct)}
+        />
       </Modal>
     </>
   )

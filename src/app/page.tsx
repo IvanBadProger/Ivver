@@ -1,5 +1,7 @@
 import { getProducts, ProductList } from "@/components/Product"
-import { ClientSidebar } from "@/components/Product/ClientSidebar"
+import { ClientSidebar } from "@/components/ClientSidebar"
+import { Suspense } from "react"
+import { Loading } from "@/widgets"
 
 type Props = {
   searchParams: Promise<{ category: string }>
@@ -13,8 +15,12 @@ export default async function Home({ searchParams }: Props) {
 
   return (
     <section className="relative container mx-auto flex gap-x-4 ">
-      <ClientSidebar activeCategory={category} />
-      <ProductList className="shrink grow" products={products} />
+      <Suspense fallback={<Loading />}>
+        <ClientSidebar activeCategory={category} />
+      </Suspense>
+      <Suspense fallback={<Loading />}>
+        <ProductList className="shrink grow" products={products} />
+      </Suspense>
     </section>
   )
 }

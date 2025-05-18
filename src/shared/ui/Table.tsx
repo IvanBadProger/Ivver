@@ -69,6 +69,7 @@ Table.Row = function TableRow(
 
 interface TableCellProps extends React.PropsWithChildren {
   className?: string
+  onClick?: () => void
 }
 
 Table.Cell = function TableCell(props: TableCellProps) {

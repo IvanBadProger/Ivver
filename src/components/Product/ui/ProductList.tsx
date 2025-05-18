@@ -1,7 +1,7 @@
 import { ProductCard } from "./ProductCard"
 import { Product } from "../types"
 import clsx from "clsx"
-import { WithId } from "@/components/Category/types"
+import { WithId } from "@/shared/types"
 
 type ProductListProps = {
   products: WithId<Product>[]
@@ -11,6 +11,10 @@ type ProductListProps = {
 export const ProductList = (props: ProductListProps) => {
   const { products, className } = props
 
+  if (!products.length) {
+    return <p className="text-center">Товаров нет</p>
+  }
+
   return (
     <div
       className={clsx(
@@ -18,9 +22,21 @@ export const ProductList = (props: ProductListProps) => {
         className
       )}
     >
-      {products.map((product) => (
-        <ProductCard key={product.id} {...product} />
-      ))}
+      {products.map(({ name, category, price, id, photos }) => {
+        const preview = photos?.filter((img) => img.is_preview)[0]
+
+        return (
+          <ProductCard
+            key={id}
+            category_id={category.id}
+            name={name}
+            category={category}
+            price={price}
+            preview_photo_url={preview?.url}
+            id={id}
+          />
+        )
+      })}
     </div>
   )
 }
