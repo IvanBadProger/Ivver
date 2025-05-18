@@ -70,6 +70,28 @@ export async function uploadPhotos(photos: FormData, id: string) {
   }
 }
 
+export async function uploadPreviewPhoto(
+  preview: FormData,
+  id: string
+) {
+  const res = await fetch(
+    getEndpoint(API.products.uploadPreview(id), true),
+    {
+      method: "POST",
+      body: preview,
+    }
+  )
+
+  if (res.ok) {
+    return "Добавление превью успешно"
+  } else if (res.status === 400) {
+    console.error(await res.json())
+    return "Валидация превью не прошло"
+  } else {
+    return "Ошибка при добавлении превью"
+  }
+}
+
 export async function updateProduct(id: string, data: ProductForm) {
   const res = await fetch(
     getEndpoint(API.products.update(id), true),

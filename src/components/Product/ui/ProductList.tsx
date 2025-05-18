@@ -1,10 +1,10 @@
 import { ProductCard } from "./ProductCard"
-import { Product } from "../types"
+import { ProductDTO } from "../types"
 import clsx from "clsx"
 import { WithId } from "@/shared/types"
 
 type ProductListProps = {
-  products: WithId<Product>[]
+  products: WithId<ProductDTO>[]
   className?: string
 }
 
@@ -22,21 +22,21 @@ export const ProductList = (props: ProductListProps) => {
         className
       )}
     >
-      {products.map(({ name, category, price, id, photos }) => {
-        const preview = photos?.filter((img) => img.is_preview)[0]
-
-        return (
-          <ProductCard
-            key={id}
-            category_id={category.id}
-            name={name}
-            category={category}
-            price={price}
-            preview_photo_url={preview?.url}
-            id={id}
-          />
-        )
-      })}
+      {products.map(
+        ({ name, category, price, id, preview_photo_url }) => {
+          return (
+            <ProductCard
+              key={id}
+              category_id={category.id}
+              name={name}
+              category={category}
+              price={price}
+              preview_photo_url={preview_photo_url}
+              id={id}
+            />
+          )
+        }
+      )}
     </div>
   )
 }

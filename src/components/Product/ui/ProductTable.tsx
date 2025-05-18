@@ -2,9 +2,12 @@
 import { ProductDTO, ProductForm as TProductForm } from "../types"
 import { Modal, Table, useModal } from "@/shared/ui"
 import { ProductRow } from "./ProductRow"
-import { ProductForm } from "./ProductForm"
+const ProductForm = dynamic(() => import("./ProductForm"), {
+  ssr: false,
+})
 import { useState } from "react"
 import { WithId } from "@/shared/types"
+import dynamic from "next/dynamic"
 
 const tableHeadCols: string[] = [
   "Название",
