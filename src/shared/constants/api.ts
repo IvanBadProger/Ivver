@@ -30,6 +30,8 @@ export const API = {
     update: (id: string) => `${ProductEndpoints.BASE}/${id}/update`,
     uploadPhotos: (id: string) =>
       `${ProductEndpoints.BASE}/${id}/photos/upload`,
+    uploadPreview: (id: string) =>
+      `${ProductEndpoints.BASE}/${id}/photos/upload-preview`,
   },
 } as const
 

@@ -1,6 +1,10 @@
 "use client"
 import { Button } from "@/shared/ui"
-import { ProductForm } from "./ProductForm"
+// import { ProductForm } from "./ProductForm"
+import dynamic from "next/dynamic"
+const ProductForm = dynamic(() => import("./ProductForm"), {
+  ssr: false,
+})
 import { Modal, useModal } from "@/shared/ui"
 import { useRef } from "react"
 
