@@ -13,6 +13,10 @@ enum ProductEndpoints {
   ADD = "products/add",
 }
 
+enum UnitsEndpoints {
+  BASE = "measurement-units",
+}
+
 export const API = {
   categories: {
     getAll: () => CategoryEndpoints.BASE,
@@ -32,6 +36,11 @@ export const API = {
       `${ProductEndpoints.BASE}/${id}/photos/upload`,
     uploadPreview: (id: string) =>
       `${ProductEndpoints.BASE}/${id}/photos/upload-preview`,
+    removePhotos: (id: string) =>
+      `${ProductEndpoints.BASE}/${id}/photos/delete`,
+  },
+  units: {
+    getAll: `${UnitsEndpoints.BASE}`,
   },
 } as const
 

@@ -22,6 +22,7 @@ const SelectBase = (props: SelectBaseProps) => {
 
   return (
     <select className={clsx(SELECT_STYLES, className)} {...rest}>
+      <option value="">Не выбрано</option>
       {options.map(({ value, name }) => (
         <option key={value + name} value={value}>
           {name}
