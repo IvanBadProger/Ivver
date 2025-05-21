@@ -6,7 +6,7 @@ import { useRef } from "react"
 export const ButtonCreateCategory = () => {
   const { openModal, dialogRef, closeModal } = useModal()
   const formRef = useRef<HTMLFormElement>(null)
-  
+
   const onClose = () => {
     formRef.current?.reset()
     closeModal()
