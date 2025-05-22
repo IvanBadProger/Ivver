@@ -4,6 +4,11 @@ import { Loading, Slider } from "@/widgets"
 import { Metadata } from "next"
 import Image from "next/image"
 import { Suspense } from "react"
+import noImage from "@/assets/no-photo-612x612.jpg"
+import {
+  ProductPhoto,
+  Specification,
+} from "@/components/Product/types"
 
 type PageProps = {
   params: Promise<{ id: string }>
@@ -16,17 +21,21 @@ export async function generateMetadata({
   const product = await getProductById(id)
 
   return {
-    title: `${product.name} `,
+    title: product.name,
     description: product.description,
     openGraph: {
       title: product.name,
       description: product.description,
       images: product.photos?.filter((img) => img.is_preview),
+      locale: "ru_RU",
+    },
+    alternates: {
+      canonical: `/products/${product.id}`,
     },
   }
 }
 
-export default async function Page(props: PageProps) {
+export default async function ProductPage(props: PageProps) {
   const { params } = props
   const { id: productId } = await params
   const {
@@ -37,29 +46,14 @@ export default async function Page(props: PageProps) {
     name,
     price,
     measurement_unit: unit,
+    specifications,
   } = await getProductById(productId)
 
   return (
     <section className="container mx-auto py-8 px-4">
       <article className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <Suspense fallback={<Loading />}>
-          {images?.length ? (
-            <Slider>
-              {images.map((img, index) => (
-                <Image
-                  key={index}
-                  src={img.url}
-                  alt={`Слайд ${index + 1} из ${images.length}`}
-                  className="w-full h-full object"
-                  width={300}
-                  height={300}
-                  priority={index === 0}
-                />
-              ))}
-            </Slider>
-          ) : (
-            <p>Нет фото продукта</p>
-          )}
+          <ImagesGallery images={images} />
         </Suspense>
 
         {/* Информация о продукте */}
@@ -75,7 +69,9 @@ export default async function Page(props: PageProps) {
           </header>
 
           <p className="text-gray-600 leading-relaxed">
-            {description ? description : "Здесь нет описания"}
+            {description
+              ? description
+              : "У этого товара нет описания"}
           </p>
 
           <dl className="space-y-2 border-t border-gray-300 pt-4">
@@ -93,8 +89,69 @@ export default async function Page(props: PageProps) {
               <dd className="font-mono">{id}</dd>
             </div>
           </dl>
+
+          <ProductSpecifications specifications={specifications} />
         </div>
       </article>
     </section>
   )
 }
+
+const ImagesGallery = ({ images }: { images?: ProductPhoto[] }) => {
+  if (images?.length) {
+    return (
+      <Slider>
+        {images.map((img, index) => (
+          <Image
+            key={img.id}
+            src={img.url}
+            alt={`Изображение товара ${index + 1} из ${
+              images.length
+            }`}
+            className="w-full h-full object-cover"
+            width={600}
+            height={600}
+            priority={index === 0}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            loading={index === 0 ? "eager" : "lazy"}
+            // placeholder="blur"
+            // blurDataURL={img.blurHash}
+          />
+        ))}
+      </Slider>
+    )
+  } else {
+    return (
+      <Image
+        src={noImage}
+        alt="У товара нет изображений"
+        width={300}
+        height={300}
+        className="w-full h-full object"
+      />
+    )
+  }
+}
+
+const ProductSpecifications = ({
+  specifications,
+}: {
+  specifications?: Specification[]
+}) => (
+  <>
+    <Title size="lg" tagName="h2" className="mb-2">
+      Характеристики
+    </Title>
+    <dl className="space-y-2 border-t border-gray-300 pt-4">
+      {specifications?.map(({ id, name, value }) => (
+        <div
+          className="flex items-center justify-between text-sm"
+          key={id}
+        >
+          <dt className="text-gray-700">{name}</dt>
+          <dd className="font-mono">{value}</dd>
+        </div>
+      ))}
+    </dl>
+  </>
+)
