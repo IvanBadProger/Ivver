@@ -1,7 +1,7 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z, ZodSchema } from "zod"
-import { useForm } from "react-hook-form"
+import { TypeOf, z, ZodSchema } from "zod"
+import { Path, useForm } from "react-hook-form"
 import React, { forwardRef } from "react"
 
 interface FormProps<TSchema extends ZodSchema>
@@ -43,9 +43,7 @@ export const Form = forwardRef(function Form<
 
   if (updatedValues) {
     for (const field in updatedValues) {
-      if (schema.shape[field]) {
-        setValue(field, updatedValues[field])
-      }
+      setValue(field as typeof updatedValues, updatedValues[field])
     }
   }
 
@@ -64,17 +62,17 @@ export const Form = forwardRef(function Form<
           {heading}
         </legend>
         {React.Children.map(children, (child) => {
-          if (child.props && Object.keys(child.props).length) {
-            const name: string = child.props.name ?? ""
-            return name
-              ? React.createElement(child.type, {
-                  ...child.props,
-                  ...register(name),
-                  key: name,
-                  errorMessage: errors[name]?.message,
-                })
-              : child
-          }
+          const name =
+            (child?.props as { name?: Path<TypeOf<TSchema>> }).name ??
+            ""
+          return name
+            ? React.createElement(child.type, {
+                ...(child.props ?? {}),
+                ...register(name),
+                key: name,
+                errorMessage: errors[name]?.message,
+              })
+            : child
         })}
       </fieldset>
     </form>
