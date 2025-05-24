@@ -30,7 +30,7 @@ export const ButtonCreateProduct = () => {
         label="Создание товара"
         ref={dialogRef}
       >
-        <ProductForm ref={formRef} />
+        <ProductForm ref={formRef} onSubmitExtra={closeModal} />
       </Modal>
     </>
   )

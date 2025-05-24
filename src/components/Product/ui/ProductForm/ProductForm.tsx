@@ -24,9 +24,11 @@ import { SpecificationField } from "./SpecificationField"
 import { PhotosDisplay } from "./PhotosDisplay"
 import { DEFAULT_VALUES } from "./constants"
 import { SelectUnit } from "./SelectUnit"
+import { toast, ToastContainer } from "react-toastify"
+import { createPortal } from "react-dom"
 
 const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
-  function ProductForm({ isEdit, productId }, ref) {
+  function ProductForm({ isEdit, productId, onSubmitExtra }, ref) {
     const {
       register,
       handleSubmit,
@@ -173,79 +175,100 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
           )
         }
       }
-      alert(messages.join(" "))
+
+      if (onSubmitExtra) {
+        console.log("dskflsdf")
+        onSubmitExtra()
+      }
+
+      toast(messages.join(" "), {
+        position: "top-center",
+        autoClose: 3000,
+        pauseOnHover: false,
+      })
     }
 
     return (
-      <form ref={ref} onSubmit={handleSubmit(onSubmit)}>
-        <fieldset>
-          <legend>{formTitle}</legend>
-          <Input
-            {...register("name")}
-            label="Название"
-            errorMessage={errors.name?.message}
-          />
-          <TextArea
-            {...register("description")}
-            label="Описание"
-            errorMessage={errors.description?.message}
-          />
-          <CategorySelect
-            {...register("category_id")}
-            errorMessage={errors.category_id?.message}
-          />
-          <Input
-            {...register("price")}
-            label="Цена"
-            type="number"
-            errorMessage={errors.price?.message}
-          />
-          <SelectUnit
-            {...register("measurement_unit_id")}
-            errorMessage={errors.measurement_unit_id?.message}
-          />
-
+      <>
+        <form
+          ref={ref}
+          onSubmit={handleSubmit(onSubmit)}
+          className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md"
+        >
           <fieldset>
-            <legend className="text-center">Характеристики</legend>
-            {fields.map((field, index) => (
-              <SpecificationField
-                errorMessage={errors.specifications?.message}
-                index={index}
-                onRemove={removeSpecification}
-                register={register}
-                key={field.id}
+            <legend>{formTitle}</legend>
+            <Input
+              {...register("name")}
+              label="Название"
+              errorMessage={errors.name?.message}
+            />
+            <TextArea
+              {...register("description")}
+              label="Описание"
+              errorMessage={errors.description?.message}
+            />
+            <CategorySelect
+              {...register("category_id")}
+              errorMessage={errors.category_id?.message}
+            />
+            <Input
+              {...register("price")}
+              label="Цена"
+              type="number"
+              errorMessage={errors.price?.message}
+            />
+            <SelectUnit
+              {...register("measurement_unit_id")}
+              errorMessage={errors.measurement_unit_id?.message}
+            />
+
+            <fieldset>
+              <legend className="text-center">Характеристики</legend>
+              {fields.map((field, index) => (
+                <SpecificationField
+                  errorMessage={errors.specifications?.message}
+                  index={index}
+                  onRemove={removeSpecification}
+                  register={register}
+                  key={field.id}
+                />
+              ))}
+              <Button onClick={addSpecification}>
+                <CirclePlus />
+                <span>Добавить характеристику</span>
+              </Button>
+            </fieldset>
+
+            <Input
+              {...register("preview")}
+              type="file"
+              accept="image/*"
+              label="Превью продукта"
+            />
+
+            <Input
+              {...register("photos")}
+              type="file"
+              accept="image/*"
+              label="Фото продукта"
+              multiple
+            />
+
+            {photos.length && (
+              <PhotosDisplay
+                photos={photos}
+                onDelete={onDeletePhoto}
               />
-            ))}
-            <Button onClick={addSpecification}>
-              <CirclePlus />
-              <span>Добавить характеристику</span>
+            )}
+
+            <Button type="submit" disabled={isSubmitting}>
+              {isEdit ? "Редактировать" : "Создать"}
             </Button>
           </fieldset>
+        </form>
 
-          <Input
-            {...register("preview")}
-            type="file"
-            accept="image/*"
-            label="Превью продукта"
-          />
-
-          <Input
-            {...register("photos")}
-            type="file"
-            accept="image/*"
-            label="Фото продукта"
-            multiple
-          />
-
-          {photos.length && (
-            <PhotosDisplay photos={photos} onDelete={onDeletePhoto} />
-          )}
-
-          <Button type="submit" disabled={isSubmitting}>
-            {isEdit ? "Редактировать" : "Создать"}
-          </Button>
-        </fieldset>
-      </form>
+        {createPortal(<ToastContainer limit={3} />, document.body)}
+      </>
     )
   }
 )

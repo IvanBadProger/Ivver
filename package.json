@@ -16,16 +16,17 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.1",
+    "react-toastify": "^11.0.5",
     "swiper": "^11.2.6",
     "zod": "^3.24.3"
   },
   "devDependencies": {
-    "@types/swiper": "^5.4.3",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/swiper": "^5.4.3",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
     "tailwindcss": "^4",

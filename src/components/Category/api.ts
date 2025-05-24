@@ -1,6 +1,8 @@
 import { API, getEndpoint } from "@/shared/constants"
 import { Category, CategoryDTO } from "./types"
 
+type ResponseValidationError = Record<string, string[]>
+
 export const getCategories = async (
   isAdmin?: boolean
 ): Promise<Category[]> => {
@@ -16,7 +18,6 @@ export const getCategories = async (
     return []
   }
 }
-type ResponseValidationError = Record<string, string[]>
 
 export const updateCategory = async (
   id: string,

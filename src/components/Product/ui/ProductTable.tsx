@@ -54,7 +54,11 @@ export const ProductTable = (props: ProductTableProps) => {
         ref={dialogRef}
         label="Редактирование товара"
       >
-        <ProductForm isEdit productId={selectedProductId} />
+        <ProductForm
+          isEdit
+          productId={selectedProductId}
+          onSubmitExtra={closeModal}
+        />
       </Modal>
     </>
   )
