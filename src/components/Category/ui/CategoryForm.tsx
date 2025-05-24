@@ -4,6 +4,8 @@ import { CategoryDTO, CategoryDTOSchema } from "../types"
 import { addCategory, updateCategory } from "../api"
 import { WithId } from "@/shared/types"
 import { forwardRef } from "react"
+import { toast, ToastContainer } from "react-toastify"
+import { createPortal } from "react-dom"
 
 interface CategoryFormProps {
   isEdit?: boolean
@@ -22,11 +24,19 @@ export const CategoryForm = forwardRef<
     : "Создание категории"
 
   const onSubmit = async (data: CategoryDTO) => {
+    let res
+
     if (isEdit && category?.id) {
-      alert(await updateCategory(category.id, data))
+      res = (await updateCategory(category.id, data)).toString()
     } else {
-      alert(await addCategory(data))
+      res = (await addCategory(data)).toString()
     }
+
+    toast(res, {
+      position: "top-center",
+      autoClose: 3000,
+      pauseOnHover: false,
+    })
 
     if (onSubmitExtra) onSubmitExtra()
   }
@@ -40,13 +50,13 @@ export const CategoryForm = forwardRef<
         onSubmit={onSubmit}
         updatedValues={category}
       >
-        {/* fix: если указать неправльный name не сработает */}
         <Input label="Название" name="name" />
         <TextArea label="Описание" name="description" />
         <Button type="submit">
           {isEdit ? "Редактировать" : "Создать"}
         </Button>
       </Form>
+      {createPortal(<ToastContainer limit={3} />, document.body)}
     </>
   )
 })

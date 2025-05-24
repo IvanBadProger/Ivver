@@ -23,6 +23,7 @@ export const API = {
     add: () => CategoryEndpoints.ADD,
     getById: (id: string) => `${CategoryEndpoints.BASE}/${id}`,
     update: (id: string) => `${CategoryEndpoints.BASE}/${id}/update`,
+    delete: (id: string) => `${CategoryEndpoints.BASE}/${id}/delete`,
   },
   products: {
     getAll: (category?: string) =>

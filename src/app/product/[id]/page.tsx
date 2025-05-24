@@ -41,7 +41,6 @@ export default async function ProductPage(props: PageProps) {
   const {
     category,
     description,
-    id,
     photos: images,
     name,
     price,
@@ -82,11 +81,6 @@ export default async function ProductPage(props: PageProps) {
                 <span content="RUB">&nbsp;₽</span>
                 {unit && <span>&nbsp;/ {unit.name}</span>}
               </dd>
-            </div>
-
-            <div className="flex items-center justify-between text-sm">
-              <dt className="text-gray-500">Артикул:</dt>
-              <dd className="font-mono">{id}</dd>
             </div>
           </dl>
 

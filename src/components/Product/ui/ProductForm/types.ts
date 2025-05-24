@@ -37,4 +37,5 @@ export type ProductFormAdd = z.infer<typeof ProductFormAddSchema>
 export interface ProductFormProps {
   isEdit?: Readonly<boolean>
   productId?: Readonly<string>
+  onSubmitExtra?: () => void
 }

@@ -12,6 +12,7 @@ interface FormProps<TSchema extends ZodSchema>
   updatedValues?: z.TypeOf<TSchema>
   defaultValues?: z.TypeOf<TSchema>
   heading?: string
+  isReset?: boolean
 }
 
 export const Form = forwardRef(function Form<
@@ -27,6 +28,7 @@ export const Form = forwardRef(function Form<
     onSubmit,
     updatedValues,
     defaultValues,
+    isReset = true,
     ...rest
   } = props
   const {
@@ -50,10 +52,12 @@ export const Form = forwardRef(function Form<
   return (
     <form
       ref={ref}
-      className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md "
+      className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md"
       onSubmit={handleSubmit((data) => {
         onSubmit(data)
-        reset()
+        if (isReset) {
+          reset()
+        }
       })}
       {...rest}
     >

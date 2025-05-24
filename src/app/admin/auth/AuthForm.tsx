@@ -1,5 +1,6 @@
 "use client"
 import { Button, Form, Input } from "@/shared/ui"
+import { toast, ToastContainer } from "react-toastify"
 import { z } from "zod"
 
 export const AuthSchema = z.object({
@@ -14,17 +15,25 @@ export function AuthForm() {
     const { password, login } = data
 
     if (password === "admin" && login === "admin") {
-      console.log("Успех")
+      toast.success("Успех")
     } else {
-      console.log("Не успех")
+      toast.error("Не успех")
     }
   }
 
   return (
-    <Form onSubmit={onAuth} schema={AuthSchema}>
-      <Input label="Логин" name="login" />
-      <Input label="Пароль" name="password" type="password" />
-      <Button type="submit">Войти</Button>
-    </Form>
+    <>
+      <Form isReset={false} onSubmit={onAuth} schema={AuthSchema}>
+        <Input label="Логин" name="login" autoComplete="email" />
+        <Input
+          label="Пароль"
+          name="password"
+          type="password"
+          autoComplete="current-password"
+        />
+        <Button type="submit">Войти</Button>
+      </Form>
+      <ToastContainer position="top-center" />
+    </>
   )
 }
