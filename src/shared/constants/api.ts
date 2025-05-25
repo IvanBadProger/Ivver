@@ -43,6 +43,10 @@ export const API = {
   units: {
     getAll: `${UnitsEndpoints.BASE}`,
   },
+  admin: {
+    login: `login`,
+    logout: `logout`,
+  },
 } as const
 
 export const getEndpoint = (

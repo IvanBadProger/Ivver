@@ -1,6 +1,6 @@
 export { Menu } from "./Menu"
 export { Footer } from "./Footer"
-export { Header } from "./Header"
+export { Header } from "./Header/Header"
 export { Loading } from "./Loading"
 export { MenuItem } from "./MenuItem"
 export { Sidebar } from "./Sidebar"
