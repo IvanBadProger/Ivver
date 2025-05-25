@@ -3,6 +3,7 @@ import { Nunito_Sans } from "next/font/google"
 import "./globals.css"
 import { Footer, Header } from "@/widgets"
 import clsx from "clsx"
+import { cookies } from "next/headers"
 
 const nunitoSans = Nunito_Sans({
   variable: "--font-nunito-sans",
@@ -24,11 +25,14 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const cookieStore = await cookies()
+  const token = cookieStore.get("token")?.value
+
   return (
     <html lang="ru">
       <body
@@ -37,7 +41,7 @@ export default function RootLayout({
           "antialiased flex flex-col min-h-screen overflow-x-hidden"
         )}
       >
-        <Header />
+        <Header token={token} />
         <main className="shrink grow my-8">{children}</main>
         <Footer />
       </body>

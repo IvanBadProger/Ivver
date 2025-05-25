@@ -1,24 +1,25 @@
 "use client"
+import { login } from "@/components/Admin/api"
 import { Button, Form, Input } from "@/shared/ui"
+import { useRouter } from "next/navigation"
 import { toast, ToastContainer } from "react-toastify"
 import { z } from "zod"
 
 export const AuthSchema = z.object({
-  login: z.string().nonempty(),
-  password: z.string().nonempty(),
+  login: z.string().nonempty("Это поле обязательно"),
+  password: z.string().nonempty("Это поле обязательно"),
 })
 
 export type AuthData = z.infer<typeof AuthSchema>
 
 export function AuthForm() {
-  const onAuth = async (data: AuthData) => {
-    const { password, login } = data
+  const router = useRouter()
 
-    if (password === "admin" && login === "admin") {
-      toast.success("Успех")
-    } else {
-      toast.error("Не успех")
-    }
+  const onAuth = async (data: AuthData) => {
+    const message = await login(data)
+
+    toast(message)
+    router.push("/")
   }
 
   return (
@@ -33,7 +34,12 @@ export function AuthForm() {
         />
         <Button type="submit">Войти</Button>
       </Form>
-      <ToastContainer position="top-center" />
+
+      <ToastContainer
+        position="top-center"
+        pauseOnHover={false}
+        autoClose={3000}
+      />
     </>
   )
 }

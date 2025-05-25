@@ -18,6 +18,7 @@ export async function getProducts(category?: string) {
     return data
   } catch (error) {
     console.error(error)
+    return []
   }
 }
 export async function getProductById(id: string): Promise<Product> {
