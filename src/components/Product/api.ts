@@ -3,11 +3,20 @@ import { API, getEndpoint } from "@/shared/constants"
 import { Product } from "./types"
 import { ProductForm } from "./ui/ProductForm/types"
 import { revalidateTag } from "next/cache"
+import { Paginator } from "@/shared/types"
 
-export async function getProducts(category?: string) {
+export async function getProducts(
+  category: string = "all",
+  page: string = "1"
+): Promise<Paginator> {
   try {
     const res = await fetch(
-      getEndpoint(API.products.getAll(category)),
+      getEndpoint(
+        API.products.getAll(
+          category === "all" ? "" : category,
+          page === "1" ? "" : page
+        )
+      ),
       {
         cache: "force-cache",
         next: { tags: ["products"], revalidate: 3600 },
@@ -18,17 +27,34 @@ export async function getProducts(category?: string) {
     return data
   } catch (error) {
     console.error(error)
-    return []
+
+    return {
+      current_page: 1,
+      data: [],
+      from: 1,
+      last_page: 1,
+      links: [],
+      path: "",
+      per_page: 1,
+      to: 1,
+      total: 1,
+    }
   }
 }
-export async function getProductById(id: string): Promise<Product> {
-  const res = await fetch(getEndpoint(API.products.getById(id)), {
-    cache: "force-cache",
-    next: { tags: ["products"], revalidate: 3600 },
-  })
-  const data = await res.json()
+export async function getProductById(
+  id: string
+): Promise<Product | void> {
+  try {
+    const res = await fetch(getEndpoint(API.products.getById(id)), {
+      cache: "force-cache",
+      next: { tags: ["products"], revalidate: 3600 },
+    })
+    const data = await res.json()
 
-  return data
+    return data
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 export async function addProduct(product: ProductForm) {
@@ -123,20 +149,24 @@ export async function removeProductPhotos(
 }
 
 export async function updateProduct(id: string, data: ProductForm) {
-  const res = await fetch(
-    getEndpoint(API.products.update(id), true),
-    { method: "PATCH", body: JSON.stringify(data) }
-  )
-  revalidateTag("products")
+  try {
+    const res = await fetch(
+      getEndpoint(API.products.update(id), true),
+      { method: "PATCH", body: JSON.stringify(data) }
+    )
+    revalidateTag("products")
 
-  if (res.ok) {
-    return "Обновление товара успешно"
-  } else if (res.status === 400) {
-    const data = await res.json()
-    console.error(data)
-    return data
-  } else {
-    return "Ошибка при добавлении товара"
+    if (res.ok) {
+      return "Обновление товара успешно"
+    } else if (res.status === 400) {
+      const data = await res.json()
+      console.error(data)
+      return data
+    } else {
+      return "Ошибка при обновлении товара"
+    }
+  } catch (error) {
+    console.error(error)
   }
 }
 

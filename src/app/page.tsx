@@ -2,15 +2,17 @@ import { getProducts, ProductList } from "@/components/Product"
 import { ClientSidebar } from "@/components/ClientSidebar"
 import { Suspense } from "react"
 import { Loading } from "@/widgets"
+import { ProductsPagination } from "@/components/Product/ui/ProductsPagination"
 
 type Props = {
-  searchParams: Promise<{ category: string }>
+  searchParams: Promise<{ category: string; page: string }>
 }
 
 export default async function Home({ searchParams }: Props) {
-  const { category = "all" } = await searchParams
-  const products = await getProducts(
-    category === "all" ? undefined : category
+  const { category = "all", page = "1" } = await searchParams
+  const { data: products, ...paginator } = await getProducts(
+    category,
+    page
   )
 
   return (
@@ -19,7 +21,14 @@ export default async function Home({ searchParams }: Props) {
         <ClientSidebar activeCategory={category} />
       </Suspense>
       <Suspense fallback={<Loading />}>
-        <ProductList className="shrink grow" products={products} />
+        <div className="w-full flex flex-col gap-y-4">
+          <ProductList className="shrink grow" products={products} />
+          <ProductsPagination
+            {...paginator}
+            category={category}
+            baseUrl="/"
+          />
+        </div>
       </Suspense>
     </section>
   )

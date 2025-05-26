@@ -7,18 +7,19 @@ type PaginationLink = {
   label: string
   active: boolean
 }
+
 export type Paginator = {
   current_page: number
-  data: ProductDTO[]
-  first_page_url: string
+  data: WithId<ProductDTO>[]
+  first_page_url?: string
   from: number
   last_page: number
-  last_page_url: string
+  last_page_url?: string
   links: PaginationLink[]
-  next_page_url?: string | null
+  next_page_url?: string
   path: string
   per_page: number
-  prev_page_url?: string | null
+  prev_page_url?: string
   to: number
   total: number
 }

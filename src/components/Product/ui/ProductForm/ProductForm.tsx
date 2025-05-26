@@ -77,16 +77,17 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
 
     useEffect(() => {
       if (productId) {
-        getProductById(productId).then(
-          ({
-            category_id,
-            price,
-            specifications,
-            description,
-            measurement_unit_id,
-            name,
-            photos,
-          }) => {
+        getProductById(productId).then((res) => {
+          if (typeof res === "object") {
+            const {
+              category_id,
+              price,
+              specifications,
+              description,
+              measurement_unit_id,
+              name,
+              photos,
+            } = res
             setFieldsFromProductData({
               category_id,
               price,
@@ -100,7 +101,7 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
             })
             setPhotos(photos ?? [])
           }
-        )
+        })
       }
     }, [productId, setFieldsFromProductData])
 
@@ -177,7 +178,6 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
       }
 
       if (onSubmitExtra) {
-        console.log("dskflsdf")
         onSubmitExtra()
       }
 
@@ -195,7 +195,7 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
           onSubmit={handleSubmit(onSubmit)}
           className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md"
         >
-          <fieldset>
+          <fieldset className="flex flex-col gap-y-4">
             <legend>{formTitle}</legend>
             <Input
               {...register("name")}
@@ -222,7 +222,7 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
               errorMessage={errors.measurement_unit_id?.message}
             />
 
-            <fieldset>
+            <fieldset className="flex flex-col gap-y-4">
               <legend className="text-center">Характеристики</legend>
               {fields.map((field, index) => (
                 <SpecificationField

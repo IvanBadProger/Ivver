@@ -25,7 +25,6 @@ type ProductTableProps = {
 
 export const ProductTable = (props: ProductTableProps) => {
   const { products } = props
-  console.log(products)
 
   const { dialogRef, openModal, closeModal } = useModal()
   const [selectedProductId, setSelectedProductId] = useState<string>()

@@ -26,10 +26,15 @@ export const API = {
     delete: (id: string) => `${CategoryEndpoints.BASE}/${id}/delete`,
   },
   products: {
-    getAll: (category?: string) =>
-      category
-        ? `${ProductEndpoints.BASE}?category=${category}`
-        : ProductEndpoints.BASE,
+    getAll: (category: string, page: string) => {
+      const params = new URLSearchParams({
+        category,
+        page,
+      })
+      return `${ProductEndpoints.BASE}${
+        params ? "?" + params.toString() : ""
+      }`
+    },
     getById: (id: string) => `${ProductEndpoints.BASE}/${id}`,
     add: () => ProductEndpoints.ADD,
     update: (id: string) => `${ProductEndpoints.BASE}/${id}/update`,

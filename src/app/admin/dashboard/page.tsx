@@ -6,19 +6,22 @@ import {
 } from "@/components/Admin"
 
 type DashboardProps = {
-  searchParams: Promise<{ tab?: "products" | "categories" }>
+  searchParams: Promise<{
+    tab?: "products" | "categories"
+    page?: string
+  }>
 }
 
 export default async function Dashboard({
   searchParams,
 }: DashboardProps) {
-  const { tab = "products" } = await searchParams
+  const { tab = "products", page = "1" } = await searchParams
 
   return (
     <div className="mx-auto p-4 bg-white shadow-md rounded-lg overflow-x-auto">
       <DashboardHeaderSwitcher tab={tab} />
       <Suspense fallback={<Loading />}>
-        <DashboardTableSwitcher tab={tab} />
+        <DashboardTableSwitcher tab={tab} page={page} />
       </Suspense>
     </div>
   )
