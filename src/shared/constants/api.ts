@@ -1,7 +1,7 @@
-enum BaseUrls {
-  DEFAULT = "http://127.0.0.1:8000/api/",
-  ADMIN = "http://127.0.0.1:8000/api/admin/",
-}
+const BaseUrls = {
+  DEFAULT: process.env.API_URL_DEFAULT,
+  ADMIN: process.env.API_URL_ADMIN,
+} as const
 
 enum CategoryEndpoints {
   BASE = "categories",
@@ -42,7 +42,7 @@ export const API = {
       `${ProductEndpoints.BASE}/${id}/photos/upload`,
     uploadPreview: (id: string) =>
       `${ProductEndpoints.BASE}/${id}/photos/upload-preview`,
-    removePhotos: `${ProductEndpoints.BASE}/photos/delete`,
+    removePhotos: `${ProductEndpoints.BASE}/photos/remove`,
     remove: (id: string) => `${ProductEndpoints.BASE}/${id}/delete`,
   },
   units: {

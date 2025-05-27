@@ -23,7 +23,6 @@ import { CirclePlus } from "lucide-react"
 import { SpecificationField } from "./SpecificationField"
 import { PhotosDisplay } from "./PhotosDisplay"
 import { DEFAULT_VALUES } from "./constants"
-import { SelectUnit } from "./SelectUnit"
 import { toast, ToastContainer } from "react-toastify"
 import { createPortal } from "react-dom"
 
@@ -234,10 +233,13 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
               type="number"
               errorMessage={errors.price?.message}
             />
+            {/*
+          
             <SelectUnit
               {...register("measurement_unit_id")}
               errorMessage={errors.measurement_unit_id?.message}
             />
+             */}
 
             <fieldset className="flex flex-col gap-y-4">
               <legend className="text-center">Характеристики</legend>

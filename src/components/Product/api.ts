@@ -188,7 +188,6 @@ export async function removeProductPhotos(
       body: JSON.stringify({ photos: photosUrl }),
     }
   )
-  console.log(photosUrl)
 
   revalidateTag("products")
 
@@ -233,26 +232,6 @@ export async function updateProduct(id: string, data: ProductForm) {
   } catch (error) {
     console.error(error)
     return MESSAGES.updateError
-  }
-}
-
-export async function getMeasurementUnits() {
-  try {
-    const res = await fetch(getEndpoint(API.units.getAll, true), {
-      cache: "force-cache",
-      next: { tags: ["units"] },
-    })
-
-    if (res.ok) {
-      return await res.json()
-    } else if (res.status === 401) {
-      return MESSAGES.unathorization
-    }
-
-    return "Ошибка при получении единиц измерения"
-  } catch (error) {
-    console.error(error)
-    return "Ошибка при получении единиц измерения"
   }
 }
 
