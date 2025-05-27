@@ -8,7 +8,7 @@ export const AdminSidebar = () => {
   const tab = searchParams.get("tab") ?? "products"
 
   return (
-    <Sidebar title="Менюшечка">
+    <Sidebar title="Меню">
       <Menu menuItems={ADMIN_MENU_ITEMS} activeValue={tab} />
     </Sidebar>
   )

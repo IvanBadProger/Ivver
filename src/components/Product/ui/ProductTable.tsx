@@ -12,12 +12,7 @@ import { useState } from "react"
 import { WithId } from "@/shared/types"
 import dynamic from "next/dynamic"
 
-const tableHeadCols: string[] = [
-  "Название",
-  "Категория",
-  "Цена",
-  "Единица измерения",
-]
+const tableHeadCols: string[] = ["Название", "Категория", "Цена"]
 
 type ProductTableProps = {
   products: WithId<ProductDTO>[]

@@ -20,6 +20,8 @@ export async function generateMetadata({
   const { id } = await params
   const product = await getProductById(id)
 
+  if (!product) return {}
+
   return {
     title: product.name,
     description: product.description,
@@ -38,6 +40,11 @@ export async function generateMetadata({
 export default async function ProductPage(props: PageProps) {
   const { params } = props
   const { id: productId } = await params
+  const product = await getProductById(productId)
+
+  if (!product)
+    return <div>Ошибка при получении информации о продукте</div>
+
   const {
     category,
     description,
@@ -46,7 +53,7 @@ export default async function ProductPage(props: PageProps) {
     price,
     measurement_unit: unit,
     specifications,
-  } = await getProductById(productId)
+  } = product
 
   return (
     <section className="container mx-auto py-8 px-4">
@@ -84,7 +91,9 @@ export default async function ProductPage(props: PageProps) {
             </div>
           </dl>
 
-          <ProductSpecifications specifications={specifications} />
+          {!!specifications?.length && (
+            <ProductSpecifications specifications={specifications} />
+          )}
         </div>
       </article>
     </section>
@@ -93,9 +102,13 @@ export default async function ProductPage(props: PageProps) {
 
 const ImagesGallery = ({ images }: { images?: ProductPhoto[] }) => {
   if (images?.length) {
+    const sortedImages = images.toSorted(
+      (a, b) => (b.is_preview ? 1 : 0) - (a.is_preview ? 1 : 0)
+    )
+
     return (
       <Slider>
-        {images.map((img, index) => (
+        {sortedImages.map((img, index) => (
           <Image
             key={img.id}
             src={img.url}

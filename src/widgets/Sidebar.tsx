@@ -5,20 +5,20 @@ import { PropsWithChildren } from "react"
 interface SidebarProps extends PropsWithChildren {
   title: string
 }
-const SIZE_CLASSES = "xl:w-64 lg:w-32 md:w-24"
+// const SIZE_CLASSES = "xl:w-64 lg:w-48 md:w-24"
 
 export const Sidebar = (props: SidebarProps) => {
   const { children, title } = props
 
   return (
-    <aside className={SIZE_CLASSES}>
+    <aside className="">
       <div
         className={clsx(
-          "sticky left-0 top-8 rounded-lg bg-white shadow-md",
-          SIZE_CLASSES
+          "sticky left-0 top-8 rounded-lg bg-white shadow-md"
+          // SIZE_CLASSES
         )}
       >
-        <Title size="md" className="py-4">
+        <Title size="md" className="p-4">
           {title}
         </Title>
 

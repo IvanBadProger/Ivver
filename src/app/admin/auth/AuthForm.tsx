@@ -19,7 +19,7 @@ export function AuthForm() {
     const message = await login(data)
 
     toast(message)
-    router.push("/")
+    router.push("/admin/dashboard")
   }
 
   return (

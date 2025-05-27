@@ -1,7 +1,7 @@
 import { UseFormRegister } from "react-hook-form"
 import { ProductFormAdd } from "./types"
 import { Button, Input } from "@/shared/ui"
-import { Trash } from "lucide-react"
+import { X } from "lucide-react"
 
 type SpecificationFieldProps = {
   register: UseFormRegister<ProductFormAdd>
@@ -17,7 +17,7 @@ export const SpecificationField = ({
   onRemove,
 }: SpecificationFieldProps) => {
   return (
-    <div className="flex gap-x-4">
+    <div className="flex items-end gap-x-4">
       <Input
         label="Имя характеристики"
         {...register(`specifications.${index}.name`)}
@@ -27,8 +27,8 @@ export const SpecificationField = ({
         label="Значение"
         {...register(`specifications.${index}.value`)}
       />
-      <Button mode="danger" onClick={() => onRemove(index)}>
-        <Trash />
+      <Button mode="danger" size="sm" onClick={() => onRemove(index)}>
+        <X size={16} />
       </Button>
     </div>
   )

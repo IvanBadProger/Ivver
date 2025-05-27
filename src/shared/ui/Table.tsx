@@ -8,7 +8,10 @@ function Table(props: TableProps) {
 
   return (
     <table
-      className={clsx("divide-y divide-gray-200", className)}
+      className={clsx(
+        "divide-y divide-gray-200 overflow-auto",
+        className
+      )}
       {...rest}
     >
       {children}
@@ -76,7 +79,12 @@ Table.Cell = function TableCell(props: TableCellProps) {
   const { children, className } = props
 
   return (
-    <td className={clsx("py-4 px-6 whitespace-nowrap", className)}>
+    <td
+      className={clsx(
+        "py-4 px-6 whitespace-nowrap truncate",
+        className
+      )}
+    >
       {children}
     </td>
   )

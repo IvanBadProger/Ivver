@@ -18,7 +18,7 @@ export default async function Dashboard({
   const { tab = "products", page = "1" } = await searchParams
 
   return (
-    <div className="mx-auto p-4 bg-white shadow-md rounded-lg overflow-x-auto">
+    <div className="p-4 bg-white shadow-md rounded-lg">
       <DashboardHeaderSwitcher tab={tab} />
       <Suspense fallback={<Loading />}>
         <DashboardTableSwitcher tab={tab} page={page} />

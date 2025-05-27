@@ -42,8 +42,8 @@ export const API = {
       `${ProductEndpoints.BASE}/${id}/photos/upload`,
     uploadPreview: (id: string) =>
       `${ProductEndpoints.BASE}/${id}/photos/upload-preview`,
-    removePhotos: (id: string) =>
-      `${ProductEndpoints.BASE}/${id}/photos/delete`,
+    removePhotos: `${ProductEndpoints.BASE}/photos/delete`,
+    remove: (id: string) => `${ProductEndpoints.BASE}/${id}/delete`,
   },
   units: {
     getAll: `${UnitsEndpoints.BASE}`,

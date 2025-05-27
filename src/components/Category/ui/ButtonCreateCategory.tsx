@@ -1,6 +1,9 @@
 "use client"
 import { Button, Modal, useModal } from "@/shared/ui"
-import { CategoryForm } from "./CategoryForm"
+import dynamic from "next/dynamic"
+const CategoryForm = dynamic(() => import("./CategoryForm"), {
+  ssr: false,
+})
 import { useRef } from "react"
 
 export const ButtonCreateCategory = () => {

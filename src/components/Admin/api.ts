@@ -18,7 +18,7 @@ export const login = async (payload: {
 
       const cookieStore = await cookies()
       cookieStore.delete("token")
-      cookieStore.set("token", token)
+      cookieStore.set("token", token, { maxAge: 259200 })
 
       return "Успешный вход"
     } else {

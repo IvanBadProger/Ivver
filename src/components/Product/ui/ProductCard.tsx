@@ -4,16 +4,26 @@ import Image from "next/image"
 import Link from "next/link"
 import skeletonPhoto from "@/assets/no-photo-612x612.jpg"
 import { WithId } from "@/shared/types"
+import clsx from "clsx"
 
-type ProductCardProps = WithId<ProductDTO>
+type ProductCardProps = WithId<ProductDTO> & { className?: string }
 
 export const ProductCard = (props: ProductCardProps) => {
-  const { id, category, name, price, preview_photo_url } = props
+  const { id, category, name, price, preview_photo_url, className } =
+    props
 
   return (
-    <article className="group relative overflow-hidden rounded-xl bg-white p-4 shadow-lg transition-all hover:shadow-xl max-w-[30vw] cursor-pointer">
-      <Link href={`/product/${id}`}>
-        <div className="relative mb-4 aspect-square overflow-hidden rounded-xl">
+    <article
+      className={clsx(
+        "group relative overflow-hidden rounded-xl bg-white shadow-lg transition-all w-full hover:shadow-xl cursor-pointer",
+        className
+      )}
+    >
+      <Link
+        href={`/product/${id}`}
+        className="flex flex-col gap-y-2 items-between h-full p-4"
+      >
+        <div className="relative mb-2 aspect-square overflow-hidden rounded-xl">
           {preview_photo_url ? (
             <Image
               className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -35,9 +45,12 @@ export const ProductCard = (props: ProductCardProps) => {
           )}
         </div>
 
-        <Badge text={category?.name} className="mb-2" />
+        <Badge text={category?.name} className="max-w-full w-fit" />
 
-        <Title size="lg" className="my-2 text-gray-900 line-clamp-4">
+        <Title
+          size="lg"
+          className="text-gray-900 line-clamp-4 shrink grow"
+        >
           {name}
         </Title>
 

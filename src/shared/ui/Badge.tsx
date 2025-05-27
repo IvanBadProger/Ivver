@@ -21,7 +21,7 @@ export const Badge = (props: BadgeProps) => {
   return (
     <span
       className={clsx(
-        "rounded-full bg-primary-50 px-3 py-1 font-semibold text-primary-600",
+        "rounded-full bg-primary-50 px-3 py-1 font-semibold text-primary-600 truncate block max-w-fit",
         BADGE_SIZES[size],
         className
       )}

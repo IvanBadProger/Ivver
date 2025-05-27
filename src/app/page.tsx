@@ -16,7 +16,7 @@ export default async function Home({ searchParams }: Props) {
   )
 
   return (
-    <section className="relative container mx-auto flex gap-x-4 ">
+    <section className="relative container mx-auto px-4 flex gap-x-4 ">
       <Suspense fallback={<Loading />}>
         <ClientSidebar activeCategory={category} />
       </Suspense>

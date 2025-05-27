@@ -1,28 +1,58 @@
 import Image from "next/image"
 import { ProductPhoto } from "../../types"
-import { Button } from "@/shared/ui"
+import { Badge, Button, Title } from "@/shared/ui"
 import { Trash } from "lucide-react"
 
 type PhotosDisplayProps = {
   photos: ProductPhoto[]
-  onDelete: (id: string) => void
+  selectedPhotosIds: string[]
+  onClick: (id: string) => void
 }
 
 export const PhotosDisplay = ({
   photos,
-  onDelete,
+  selectedPhotosIds,
+  onClick,
 }: PhotosDisplayProps) => {
+  const imageSize = 150
+
   return (
-    <div className="flex gap-4">
-      {photos.map(({ id, url, is_preview }) => (
-        <div key={id} className="flex flex-col gap-y-2">
-          <Image src={url} alt="" width={50} height={50} />
-          {is_preview && <div>Это Превью</div>}
-          <Button mode="danger" onClick={() => onDelete(id)}>
-            <Trash />
-          </Button>
-        </div>
-      ))}
-    </div>
+    <>
+      <Title size="md" align="center">
+        Фото продукта
+      </Title>
+      <div className="flex justify-around gap-4 flex-wrap border border-gray-300 overflow-y-scroll max-h-[500px] p-2">
+        {photos.map(({ id, url, is_preview }) => {
+          const isSelected = !!selectedPhotosIds.includes(id)
+
+          return (
+            <div
+              key={id}
+              className="flex flex-col gap-y-2 relative justify-between"
+            >
+              {is_preview && (
+                <Badge
+                  text="превью"
+                  className="absolute top-2 left-2"
+                />
+              )}
+              <Image
+                src={url}
+                alt=""
+                width={imageSize}
+                height={imageSize}
+              />
+              <Button
+                mode={isSelected ? "danger-fill" : "danger"}
+                onClick={() => onClick(id)}
+                aria-pressed={isSelected}
+              >
+                <Trash />
+              </Button>
+            </div>
+          )
+        })}
+      </div>
+    </>
   )
 }

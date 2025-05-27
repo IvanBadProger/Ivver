@@ -35,6 +35,7 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
       formState: { errors, isSubmitting },
       control,
       setValue,
+      reset,
     } = useForm<ProductFormAdd>({
       defaultValues: DEFAULT_VALUES,
       resolver: zodResolver(ProductFormAddSchema),
@@ -45,7 +46,9 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
       name: "specifications",
     })
 
-    const [deletedPhotos, setDeletedPhotos] = useState<string[]>([])
+    const [deletePhotosIds, setDeletePhotosIds] = useState<string[]>(
+      []
+    )
     const [photos, setPhotos] = useState<ProductPhoto[]>([])
 
     const formTitle = isEdit
@@ -55,10 +58,11 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
     const setFieldsFromProductData = useCallback(
       (productData: TProductForm) => {
         for (const key in productData) {
-          setValue(
-            key as keyof TProductForm,
-            productData[key as keyof TProductForm]
-          )
+          const value = productData[key as keyof TProductForm]
+            ? productData[key as keyof TProductForm]
+            : ""
+
+          setValue(key as keyof TProductForm, value)
         }
       },
       [setValue]
@@ -88,6 +92,7 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
               name,
               photos,
             } = res
+
             setFieldsFromProductData({
               category_id,
               price,
@@ -106,7 +111,13 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
     }, [productId, setFieldsFromProductData])
 
     const onDeletePhoto = (id: string) => {
-      setDeletedPhotos((prev) => [...prev, id])
+      setDeletePhotosIds((prev) => {
+        if (prev.includes(id)) {
+          return [...prev.filter((item) => item !== id)]
+        }
+
+        return [...prev, id]
+      })
     }
 
     const onSubmit = async (formInputs: ProductFormAdd) => {
@@ -143,9 +154,12 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
       if (isEdit && productId) {
         messages.push(await updateProduct(productId, data))
 
-        if (deletedPhotos.length) {
+        if (deletePhotosIds.length) {
           messages.push(
-            await removeProductPhotos(productId, deletedPhotos)
+            await removeProductPhotos(
+              productId,
+              Array.from(deletePhotosIds)
+            )
           )
         }
 
@@ -186,6 +200,9 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
         autoClose: 3000,
         pauseOnHover: false,
       })
+
+      if (!isEdit) reset()
+      setDeletePhotosIds([])
     }
 
     return (
@@ -193,7 +210,7 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
         <form
           ref={ref}
           onSubmit={handleSubmit(onSubmit)}
-          className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md"
+          className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md overflow-hidden"
         >
           <fieldset className="flex flex-col gap-y-4">
             <legend>{formTitle}</legend>
@@ -254,15 +271,16 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
               multiple
             />
 
-            {photos.length && (
+            {!!photos.length && (
               <PhotosDisplay
+                selectedPhotosIds={deletePhotosIds}
                 photos={photos}
-                onDelete={onDeletePhoto}
+                onClick={onDeletePhoto}
               />
             )}
 
             <Button type="submit" disabled={isSubmitting}>
-              {isEdit ? "Редактировать" : "Создать"}
+              {isEdit ? "Сохранить" : "Создать"}
             </Button>
           </fieldset>
         </form>

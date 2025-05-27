@@ -25,7 +25,6 @@ export const ProductsPagination = async (
   const {
     current_page,
     last_page,
-    total,
     next_page_url,
     prev_page_url,
     category,
@@ -50,15 +49,13 @@ export const ProductsPagination = async (
   return (
     <div className="flex flex-col gap-y-1 items-center">
       <div className="flex items-center gap-x-2">
-        {prev_page_url && (
-          <PageButton
-            href={generateHref(current_page - 1)}
-            label={LABELS.prevPage}
-            isDisabled={isDisabled(current_page - 1)}
-          >
-            <ArrowLeft />
-          </PageButton>
-        )}
+        <PageButton
+          href={generateHref(current_page - 1)}
+          label={LABELS.prevPage}
+          isDisabled={!prev_page_url}
+        >
+          <ArrowLeft />
+        </PageButton>
 
         <PageButton
           href={generateHref(1)}
@@ -80,20 +77,14 @@ export const ProductsPagination = async (
           {last_page}
         </PageButton>
 
-        {next_page_url && (
-          <PageButton
-            href={generateHref(current_page + 1)}
-            label={LABELS.nextPage}
-            isDisabled={isDisabled(current_page + 1)}
-          >
-            <ArrowRight />
-          </PageButton>
-        )}
+        <PageButton
+          href={generateHref(current_page + 1)}
+          label={LABELS.nextPage}
+          isDisabled={!next_page_url}
+        >
+          <ArrowRight />
+        </PageButton>
       </div>
-
-      <span className="text-primary-400 text-sm">
-        Товаров: {total}
-      </span>
     </div>
   )
 }

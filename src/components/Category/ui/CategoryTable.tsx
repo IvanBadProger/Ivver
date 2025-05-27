@@ -2,9 +2,12 @@
 import { Modal, Table, useModal } from "@/shared/ui"
 import { CategoryDTO } from "../types"
 import { CategoryRow } from "./CategoryRow"
-import { CategoryForm } from "./CategoryForm"
+const CategoryForm = dynamic(() => import("./CategoryForm"), {
+  ssr: false,
+})
 import { useState } from "react"
 import { WithId } from "@/shared/types"
+import dynamic from "next/dynamic"
 
 type CategoryTableProps = {
   categories: WithId<CategoryDTO>[]
