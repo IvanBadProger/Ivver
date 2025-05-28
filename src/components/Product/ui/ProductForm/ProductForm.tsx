@@ -23,8 +23,8 @@ import { CirclePlus } from "lucide-react"
 import { SpecificationField } from "./SpecificationField"
 import { PhotosDisplay } from "./PhotosDisplay"
 import { DEFAULT_VALUES } from "./constants"
-import { toast, ToastContainer } from "react-toastify"
-import { createPortal } from "react-dom"
+import { toast } from "react-toastify"
+import { MAIN_TOAST_CONTAINER_ID } from "@/shared/constants"
 
 const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
   function ProductForm({ isEdit, productId, onSubmitExtra }, ref) {
@@ -56,12 +56,13 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
 
     const setFieldsFromProductData = useCallback(
       (productData: TProductForm) => {
-        for (const key in productData) {
-          const value = productData[key as keyof TProductForm]
-            ? productData[key as keyof TProductForm]
-            : ""
+        for (const k in productData) {
+          const key = k as keyof TProductForm
+          const value = productData[key]
+            ? productData[key]
+            : DEFAULT_VALUES[key]
 
-          setValue(key as keyof TProductForm, value)
+          setValue(key, value)
         }
       },
       [setValue]
@@ -130,7 +131,12 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
           photosFormData.append("photos[]", photo)
         })
 
-        return await uploadPhotos(photosFormData, productId)
+        const { message } = await uploadPhotos(
+          photosFormData,
+          productId
+        )
+
+        return message
       }
 
       const handleUploadPreview = async (
@@ -140,7 +146,11 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
         const previewFormData = new FormData()
         previewFormData.append("preview", file)
 
-        return await uploadPreviewPhoto(previewFormData, productId)
+        const { message } = await uploadPreviewPhoto(
+          previewFormData,
+          productId
+        )
+        return message
       }
 
       const { photos, preview, ...data } = formInputs
@@ -151,14 +161,12 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
       }
 
       if (isEdit && productId) {
-        messages.push(await updateProduct(productId, data))
+        messages.push((await updateProduct(productId, data)).message)
 
         if (deletePhotosIds.length) {
           messages.push(
-            await removeProductPhotos(
-              productId,
-              Array.from(deletePhotosIds)
-            )
+            (await removeProductPhotos(Array.from(deletePhotosIds)))
+              .message
           )
         }
 
@@ -174,6 +182,7 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
       } else {
         const res = await addProduct(data)
         messages.push(res.message)
+
         const addedProductId = res?.data?.id
         if (!addedProductId) return
 
@@ -195,9 +204,7 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
       }
 
       toast(messages.join(" "), {
-        position: "top-center",
-        autoClose: 3000,
-        pauseOnHover: false,
+        containerId: MAIN_TOAST_CONTAINER_ID,
       })
 
       if (!isEdit) reset()
@@ -233,13 +240,6 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
               type="number"
               errorMessage={errors.price?.message}
             />
-            {/*
-          
-            <SelectUnit
-              {...register("measurement_unit_id")}
-              errorMessage={errors.measurement_unit_id?.message}
-            />
-             */}
 
             <fieldset className="flex flex-col gap-y-4">
               <legend className="text-center">Характеристики</legend>
@@ -286,8 +286,6 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
             </Button>
           </fieldset>
         </form>
-
-        {createPortal(<ToastContainer limit={3} />, document.body)}
       </>
     )
   }

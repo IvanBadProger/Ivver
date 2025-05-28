@@ -48,7 +48,7 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(
         <div className="py-6 px-8 ">
           <header className="flex justify-between items-center gap-x-4 mb-4">
             <Title
-              size="sm"
+              size="md"
               className={clsx("", {
                 "sr-only": isLabelHidden,
               })}

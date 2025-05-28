@@ -1,4 +1,2 @@
-import { DashboardHeader } from "./DashboardHeader"
-import { DashboardHeaderSwitcher } from "./DashboardHeaderSwitcher"
-
-export { DashboardHeader, DashboardHeaderSwitcher }
+export { DashboardHeader } from "./DashboardHeader"
+export { DashboardHeaderSwitcher } from "./DashboardHeaderSwitcher"

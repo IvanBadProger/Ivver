@@ -11,7 +11,7 @@ export const Menu = (props: MenuProps) => {
   const { menuItems, activeValue } = props
 
   return (
-    <ul className="divide-y divide-gray-200 text-sm font-medium">
+    <ul className="divide-y divide-gray-200 text-sm font-medium overflow-y-auto max-h-[70dvh]">
       {menuItems.map((item, index) => {
         const isActive = item.value === activeValue
 

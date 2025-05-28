@@ -1,23 +1,31 @@
 "use client"
 import { Button } from "@/shared/ui"
-// import { ProductForm } from "./ProductForm"
 import dynamic from "next/dynamic"
+import { Modal, useModal } from "@/shared/ui"
+import { useRef } from "react"
+
 const ProductForm = dynamic(
   () => import("./ProductForm/ProductForm"),
   {
     ssr: false,
   }
 )
-import { Modal, useModal } from "@/shared/ui"
-import { useRef } from "react"
 
 export const ButtonCreateProduct = () => {
   const { openModal, dialogRef, closeModal } = useModal()
   const formRef = useRef<HTMLFormElement>(null)
 
   const onClose = () => {
-    formRef?.current?.reset()
+    resetCategoryForm()
     closeModal()
+  }
+
+  const resetCategoryForm = () => {
+    const formElement = formRef.current
+
+    if (formElement && formElement instanceof HTMLFormElement) {
+      formElement.reset()
+    }
   }
 
   return (

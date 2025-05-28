@@ -1,3 +1,4 @@
+import { Loading } from "@/widgets"
 import clsx from "clsx"
 import { forwardRef } from "react"
 
@@ -25,6 +26,7 @@ interface ButtonProps
    */
   className?: string
   size?: "sm" | "md" | "lg"
+  isLoading?: boolean
 }
 
 const BUTTON_MODE_STYLES: Record<ButtonMode, string> = {
@@ -61,6 +63,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       size = "md",
       label,
       children,
+      isLoading,
+      disabled,
       ...rest
     } = props
 
@@ -76,8 +80,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         aria-label={label}
         title={label}
+        disabled={disabled || isLoading}
         {...rest}
       >
+        {isLoading && <Loading size={24} />}
         {children}
       </button>
     )

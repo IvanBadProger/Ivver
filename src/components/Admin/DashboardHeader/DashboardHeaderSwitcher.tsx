@@ -1,12 +1,17 @@
-import { DashboardHeader } from "."
-import { DashboardHeaderSwitcherProps } from "../types"
-import { HEADER_CONFIG } from "./contants"
+import { DashboardHeader } from "./DashboardHeader"
+import { TabType } from "../types"
+import { HEADER_CONFIG } from "./constants"
+
+export interface DashboardHeaderSwitcherProps {
+  tab: TabType
+}
 
 export const DashboardHeaderSwitcher = (
   props: DashboardHeaderSwitcherProps
 ) => {
   const { tab } = props
-  const { title, button } = HEADER_CONFIG[tab]
+  const { titleText, button } =
+    HEADER_CONFIG[tab] ?? HEADER_CONFIG.error
 
-  return <DashboardHeader title={title} button={button} />
+  return <DashboardHeader titleText={titleText} button={button} />
 }

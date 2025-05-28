@@ -1,16 +1,16 @@
 "use client"
 import { Table } from "@/shared/ui"
-import { CategoryDTO } from "../types"
 import { WithId } from "@/shared/types"
+import { CategoryDTO } from "../../types"
 
 type CategoryRowProps = {
   onClick: (category: WithId<CategoryDTO>) => void
-  data: WithId<CategoryDTO>
+  rowData: WithId<CategoryDTO>
 }
 
 export const CategoryRow = (props: CategoryRowProps) => {
-  const { data, onClick } = props
-  const { id, name, description } = data
+  const { rowData, onClick } = props
+  const { id, name, description } = rowData
 
   return (
     <Table.Row
@@ -20,7 +20,7 @@ export const CategoryRow = (props: CategoryRowProps) => {
       className="cursor-pointer"
     >
       <Table.Cell>{name}</Table.Cell>
-      <Table.Cell>{description}</Table.Cell>
+      <Table.Cell>{description ?? "-"}</Table.Cell>
     </Table.Row>
   )
 }

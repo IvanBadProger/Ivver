@@ -1,13 +1,16 @@
 import type { Metadata } from "next"
-import { Nunito_Sans } from "next/font/google"
+import { Lato } from "next/font/google"
 import "./globals.css"
 import { Footer, Header } from "@/widgets"
 import clsx from "clsx"
 import { cookies } from "next/headers"
+import { ToastContainer } from "react-toastify"
+import { MAIN_TOAST_CONTAINER_ID } from "@/shared/constants"
 
-const nunitoSans = Nunito_Sans({
-  variable: "--font-nunito-sans",
+const nunitoSans = Lato({
+  variable: "--primary-font",
   subsets: ["latin"],
+  weight: ["100", "300", "400", "700", "900"],
 })
 
 export const metadata: Metadata = {
@@ -44,6 +47,12 @@ export default async function RootLayout({
         <Header token={token} />
         <main className="shrink grow my-8">{children}</main>
         <Footer />
+        <ToastContainer
+          containerId={MAIN_TOAST_CONTAINER_ID}
+          position="top-center"
+          autoClose={2000}
+          pauseOnHover={false}
+        />
       </body>
     </html>
   )

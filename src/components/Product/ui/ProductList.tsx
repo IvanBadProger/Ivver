@@ -18,7 +18,7 @@ export const ProductList = (props: ProductListProps) => {
   return (
     <div
       className={clsx(
-        "grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full",
+        "grid sm:grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full grid-cols-1 lg:max-h-[50vh]",
         className
       )}
     >

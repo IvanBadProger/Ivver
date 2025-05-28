@@ -3,7 +3,7 @@
 import { Button } from "@/shared/ui"
 import { ChevronDown } from "lucide-react"
 import { NavLink } from "./NavLink"
-import { Logout } from "@/components/Admin/api"
+import { logout } from "@/components/Admin/api"
 import { ROUTES } from "@/shared/constants"
 
 // fix: почему-то обновляется надпись со второго раза или после обновления
@@ -20,7 +20,7 @@ export const AdminNavigation = ({ token }: { token?: string }) => {
           <NavLink
             href={ROUTES.AUTH}
             isDark
-            onClick={token ? () => Logout(token ?? "") : undefined}
+            onClick={token ? () => logout(token ?? "") : undefined}
           >
             {token ? "Выйти" : "Авторизация"}
           </NavLink>

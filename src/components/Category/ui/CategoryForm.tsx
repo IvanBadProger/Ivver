@@ -3,9 +3,9 @@ import { Input, TextArea, Form, Button } from "@/shared/ui"
 import { CategoryDTO, CategoryDTOSchema } from "../types"
 import { addCategory, updateCategory } from "../api"
 import { WithId } from "@/shared/types"
-import { forwardRef } from "react"
-import { toast, ToastContainer } from "react-toastify"
-import { createPortal } from "react-dom"
+import { forwardRef, useState } from "react"
+import { toast } from "react-toastify"
+import { MAIN_TOAST_CONTAINER_ID } from "@/shared/constants"
 
 interface CategoryFormProps {
   isEdit?: boolean
@@ -13,51 +13,47 @@ interface CategoryFormProps {
   onSubmitExtra?: () => void
 }
 
-const CategoryForm = forwardRef<HTMLFormElement, CategoryFormProps>(
+export default forwardRef<HTMLFormElement, CategoryFormProps>(
   function CategoryForm(props, ref) {
     const { isEdit = false, category, onSubmitExtra } = props
-
-    const heading = isEdit
-      ? "Редактирование категории"
-      : "Создание категории"
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const onSubmit = async (data: CategoryDTO) => {
-      let res
+      setIsLoading(true)
+      let responseMessage
 
-      if (isEdit && category?.id) {
-        res = (await updateCategory(category.id, data)).toString()
-      } else {
-        res = (await addCategory(data)).toString()
+      try {
+        responseMessage =
+          isEdit && category?.id
+            ? await updateCategory(category.id, data)
+            : await addCategory(data)
+      } catch {
+        responseMessage = "Произошла неизвестная ошибка"
       }
 
-      toast(res, {
-        position: "top-center",
-        autoClose: 3000,
-        pauseOnHover: false,
+      setIsLoading(false)
+      toast(responseMessage.toString(), {
+        containerId: MAIN_TOAST_CONTAINER_ID,
       })
 
-      if (onSubmitExtra) onSubmitExtra()
+      onSubmitExtra?.()
     }
 
     return (
       <>
         <Form
           ref={ref}
-          heading={heading}
           schema={CategoryDTOSchema}
           onSubmit={onSubmit}
           updatedValues={category}
         >
           <Input label="Название" name="name" />
           <TextArea label="Описание" name="description" />
-          <Button type="submit">
+          <Button type="submit" isLoading={isLoading}>
             {isEdit ? "Сохранить" : "Создать"}
           </Button>
         </Form>
-        {createPortal(<ToastContainer limit={3} />, document.body)}
       </>
     )
   }
 )
-
-export default CategoryForm
