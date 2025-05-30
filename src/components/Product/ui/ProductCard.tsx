@@ -49,7 +49,7 @@ export const ProductCard = (props: ProductCardProps) => {
 
         <Title
           size="lg"
-          className="text-gray-900 overflow-hidden line-clamp-4 shrink grow"
+          className="text-gray-900 overflow-hidden line-clamp-4 max-h-[150px] shrink grow"
         >
           {name}
         </Title>

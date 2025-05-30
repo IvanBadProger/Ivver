@@ -57,7 +57,7 @@ export default async function ProductPage(props: PageProps) {
 
   return (
     <section className="container mx-auto py-8 px-4">
-      <article className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <article className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-h-screen">
         <Suspense fallback={<Loading />}>
           <ImagesGallery images={images} />
         </Suspense>
@@ -107,7 +107,7 @@ const ImagesGallery = ({ images }: { images?: ProductPhoto[] }) => {
     )
 
     return (
-      <Slider>
+      <Slider className="h-[75dvh] aspect-square">
         {sortedImages.map((img, index) => (
           <Image
             key={img.id}
@@ -115,9 +115,9 @@ const ImagesGallery = ({ images }: { images?: ProductPhoto[] }) => {
             alt={`Изображение товара ${index + 1} из ${
               images.length
             }`}
-            className="w-full h-full object-cover"
-            width={600}
-            height={600}
+            fill
+            // width={400}
+            // height={400}
             priority={index === 0}
             sizes="(max-width: 768px) 100vw, 50vw"
             loading={index === 0 ? "eager" : "lazy"}
@@ -130,11 +130,12 @@ const ImagesGallery = ({ images }: { images?: ProductPhoto[] }) => {
   } else {
     return (
       <Image
+        className="w-full aspect-square"
         src={noImage}
         alt="У товара нет изображений"
-        width={300}
-        height={300}
-        className="w-full h-full object"
+        width={400}
+        height={400}
+        // fill
       />
     )
   }
