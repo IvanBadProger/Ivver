@@ -22,12 +22,12 @@ export const ProductFormSchema = ProductSchema.pick({
   ),
 })
 
-export type ProductForm = z.infer<typeof ProductFormSchema>
-
 export const ProductFormAddSchema = ProductFormSchema.extend({
   photos: z.instanceof(FileList).optional(),
   preview: z.instanceof(FileList).optional(),
 })
+
+export type ProductForm = z.infer<typeof ProductFormSchema>
 
 export type ProductFormUpdate = z.infer<
   typeof ProductFormUpdateSchema

@@ -27,7 +27,12 @@ export const SpecificationField = ({
         label="Значение"
         {...register(`specifications.${index}.value`)}
       />
-      <Button mode="danger" size="sm" onClick={() => onRemove(index)}>
+      <Button
+        mode="danger"
+        size="sm"
+        onClick={() => onRemove(index)}
+        label="Удалить характеристику"
+      >
         <X size={16} />
       </Button>
     </div>

@@ -4,14 +4,15 @@ import { Product } from "./types"
 import { ProductForm } from "./ui/ProductForm/types"
 import { revalidateTag } from "next/cache"
 import { Paginator } from "@/shared/types"
-import { getToken } from "@/shared/utils"
+import { fetchWithAuth } from "@/shared/utils"
+import { handleResponseAsError } from "@/shared/utils/handleResponseAsError"
 
 enum MESSAGES {
   createError = "Ошибка при добавлении товара",
   createSuccess = "Добавление товара успешно",
   unathorization = "Вы не авторизованы! ",
   uploadPhotoError = "Ошибка при добавлении фото",
-  uploadPhoto = "Добавление фото успешно",
+  uploadPhotoSuccess = "Добавление фото успешно",
   validatePhotoError = "Валидация фото не прошло",
   uploadPreviewError = "Ошибка при добавлении превью",
   uploadPreviewSuccess = "Добавление превью успешно",
@@ -21,6 +22,12 @@ enum MESSAGES {
   removePhotoValidation = "Валидация не прошла при удалении фото",
   updateSuccess = "Успешное обновление товара",
   updateError = "Ошибка при обновлении товара",
+}
+
+type ProductResponse = {
+  message: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data?: Record<string, any>
 }
 
 export async function getProducts(
@@ -76,190 +83,148 @@ export async function getProductById(
   }
 }
 
-export async function addProduct(product: ProductForm) {
+export async function addProduct(
+  product: ProductForm
+): Promise<ProductResponse> {
   try {
-    const res = await fetch(getEndpoint(API.products.add(), true), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-        Authorization: `Bearer ${await getToken()}`,
-      },
-      body: JSON.stringify(product),
-    })
-
-    revalidateTag("products")
-
-    if (res.ok) {
-      return {
-        message: MESSAGES.createSuccess,
-        data: await res.json(),
-      }
-    } else if (res.status === 400) {
-      const data = await res.json()
-      console.error(data)
-      return data
-    } else if (res.status === 401) {
-      return MESSAGES.unathorization
-    }
-
-    return MESSAGES.createError
-  } catch (error) {
-    console.error(error)
-    return MESSAGES.createError
-  }
-}
-
-export async function uploadPhotos(photos: FormData, id: string) {
-  try {
-    const res = await fetch(
-      getEndpoint(API.products.uploadPhotos(id), true),
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${await getToken()}`,
-        },
-        body: photos,
-      }
+    const res = await fetchWithAuth(
+      getEndpoint(API.products.add(), true),
+      "POST",
+      JSON.stringify(product)
     )
 
     revalidateTag("products")
 
-    if (res.ok) {
-      return MESSAGES.uploadPhoto
-    } else if (res.status === 400) {
-      console.error(await res.json())
-      return MESSAGES.validatePhotoError
-    } else if (res.status === 401) {
-      return MESSAGES.unathorization
-    }
+    const { message, serverData } =
+      (await handleResponseAsError(res)) ?? {}
 
-    return MESSAGES.uploadPhotoError
+    return {
+      message: message ?? MESSAGES.createSuccess,
+      data: serverData ?? (await res.json()),
+    }
   } catch (error) {
     console.error(error)
-    return MESSAGES.uploadPhotoError
+    return { message: MESSAGES.createError }
+  }
+}
+
+export async function uploadPhotos(
+  photos: FormData,
+  id: string
+): Promise<ProductResponse> {
+  try {
+    const res = await fetchWithAuth(
+      getEndpoint(API.products.uploadPhotos(id), true),
+      "POST",
+      photos
+    )
+
+    revalidateTag("products")
+
+    const { message, serverData } =
+      (await handleResponseAsError(res)) ?? {}
+
+    return {
+      message: message ?? MESSAGES.uploadPhotoSuccess,
+      data: serverData,
+    }
+  } catch (error) {
+    console.error(error)
+    return { message: MESSAGES.uploadPhotoError }
   }
 }
 
 export async function uploadPreviewPhoto(
   preview: FormData,
   id: string
-) {
+): Promise<ProductResponse> {
   try {
-    const res = await fetch(
+    const res = await fetchWithAuth(
       getEndpoint(API.products.uploadPreview(id), true),
-      {
-        method: "POST",
-        body: preview,
-        headers: {
-          Authorization: `Bearer ${await getToken()}`,
-        },
-      }
+      "POST",
+      preview
     )
 
     revalidateTag("products")
 
-    if (res.ok) {
-      return MESSAGES.uploadPreviewSuccess
-    } else if (res.status === 400) {
-      console.error(await res.json())
-      return MESSAGES.uploadPreviewValidation
-    } else if (res.status === 401) {
-      return MESSAGES.unathorization
-    }
+    const { message, serverData } =
+      (await handleResponseAsError(res)) ?? {}
 
-    return MESSAGES.uploadPreviewError
+    return {
+      message: message ?? MESSAGES.uploadPreviewSuccess,
+      data: serverData,
+    }
   } catch (error) {
     console.error(error)
-    return MESSAGES.uploadPreviewError
+    return { message: MESSAGES.uploadPreviewError }
   }
 }
 
 export async function removeProductPhotos(
-  productId: string,
   photosUrl: string[]
-) {
-  const res = await fetch(
-    getEndpoint(API.products.removePhotos, true),
-    {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${await getToken()}`,
-      },
-      body: JSON.stringify({ photos: photosUrl }),
+): Promise<ProductResponse> {
+  try {
+    const res = await fetchWithAuth(
+      getEndpoint(API.products.removePhotos, true),
+      "DELETE",
+      JSON.stringify({ photos: photosUrl })
+    )
+
+    revalidateTag("products")
+    const { message, serverData } =
+      (await handleResponseAsError(res)) ?? {}
+
+    return {
+      message: message ?? MESSAGES.removePhotoSuccess,
+      data: serverData,
     }
-  )
-
-  revalidateTag("products")
-
-  if (res.ok) {
-    return MESSAGES.removePhotoSuccess
-  } else if (res.status === 400) {
-    console.error(await res.json())
-    return MESSAGES.removePhotoValidation
-  } else if (res.status === 401) {
-    return MESSAGES.unathorization
+  } catch (error) {
+    console.error(error)
+    return { message: MESSAGES.removePhotoError }
   }
-
-  return MESSAGES.removePhotoError
 }
 
-export async function updateProduct(id: string, data: ProductForm) {
+export async function updateProduct(
+  id: string,
+  data: ProductForm
+): Promise<ProductResponse> {
   try {
-    const res = await fetch(
+    const res = await fetchWithAuth(
       getEndpoint(API.products.update(id), true),
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${await getToken()}`,
-        },
-        body: JSON.stringify(data),
-      }
+      "PATCH",
+      JSON.stringify(data)
     )
 
     revalidateTag("products")
+    const { message, serverData } =
+      (await handleResponseAsError(res)) ?? {}
 
-    if (res.ok) {
-      return MESSAGES.updateSuccess
-    } else if (res.status === 400) {
-      const data = await res.json()
-      console.error(data)
-      return data
-    } else if (res.status === 401) {
-      return MESSAGES.unathorization
+    return {
+      message: message ?? MESSAGES.updateSuccess,
+      data: serverData,
     }
-
-    return MESSAGES.updateError
   } catch (error) {
     console.error(error)
-    return MESSAGES.updateError
+    return { message: MESSAGES.updateError }
   }
 }
 
-export async function removeProduct(id: string) {
+export async function removeProduct(
+  id: string
+): Promise<ProductResponse> {
   try {
-    const res = await fetch(
+    const res = await fetchWithAuth(
       getEndpoint(API.products.remove(id), true),
-      {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${await getToken()}` },
-      }
+      "DELETE"
     )
 
     revalidateTag("products")
+    const { message, serverData } =
+      (await handleResponseAsError(res)) ?? {}
 
-    if (res.ok) {
-      return "Товар удален"
-    } else if (res.status === 400) {
-      const data = await res.json()
-      console.error(data)
-      return data
-    } else if (res.status === 401) {
-      return MESSAGES.unathorization
-    }
-
-    return "Ошибка при удалении товара"
+    return { message: message ?? "Товар удален", data: serverData }
   } catch (error) {
     console.error(error)
-    return "Ошибка при удалении товара"
+    return { message: "Ошибка при удалении товара" }
   }
 }

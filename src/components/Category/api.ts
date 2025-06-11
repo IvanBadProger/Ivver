@@ -2,20 +2,22 @@
 import { API, getEndpoint } from "@/shared/constants"
 import { Category, CategoryDTO } from "./types"
 import { revalidateTag } from "next/cache"
-import { getToken } from "@/shared/utils"
+import { fetchWithAuth } from "@/shared/utils"
 
-type ResponseValidationError = Record<string, string[]>
+// Добавить обработку этого. РАньше была в fetchWithAuth
+// const HTTP_STATUS_BAD_REQUEST = 400 as const
 
 enum ERROR_MESSAGES {
   getAll = "Ошибка при получении списка категорий",
   update = "Ошибка при обновлении категории",
-  unathorization = "Вы не авторизованы! ",
   create = "Ошибка при добавлении категории",
   delete = "Ошибка удаления категории",
 }
+type ResponseValidationError = Record<string, string[]>
 
 const categoryTag = "category" as const
 
+// Функция для получения категорий
 export const getCategories = async (
   isAdmin?: boolean
 ): Promise<Category[]> => {
@@ -37,77 +39,56 @@ export const getCategories = async (
   }
 }
 
+// Функция для обновления категории
 export const updateCategory = async (
   id: string,
   payload: CategoryDTO
 ): Promise<string | ResponseValidationError> => {
   try {
-    const res = await fetch(
+    await fetchWithAuth(
       getEndpoint(API.categories.update(id), true),
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-          Authorization: `Bearer ${await getToken()}`,
-        },
-        body: JSON.stringify(payload),
-      }
+      "PATCH",
+      JSON.stringify(payload)
     )
-
-    console.log(`Bearer ${await getToken()}`)
-
     revalidateTag(categoryTag)
 
-    if (res.ok) {
-      return "Обновление успешно"
-    } else if (res.status === 400) {
-      return (await res.json()) as ResponseValidationError
-    } else if (res.status === 401) {
-      return ERROR_MESSAGES.unathorization
-    }
-
-    return ERROR_MESSAGES.update
+    return "Обновление успешно"
   } catch (error) {
-    console.error(error)
+    console.error(`Ошибка в updateCategory: ${error}`)
     return ERROR_MESSAGES.update
   }
 }
 
+// Функция для добавления категории
 export const addCategory = async (
   data: CategoryDTO
 ): Promise<string | ResponseValidationError> => {
   try {
-    const res = await fetch(getEndpoint(API.categories.add(), true), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-        Authorization: `Bearer ${await getToken()}`,
-      },
-      body: JSON.stringify(data),
-    })
-
+    await fetchWithAuth(
+      getEndpoint(API.categories.add(), true),
+      "POST",
+      JSON.stringify(data)
+    )
     revalidateTag(categoryTag)
 
-    if (res.ok) {
-      return "Добавление успешно"
-    } else if (res.status === 400) {
-      return (await res.json()) as ResponseValidationError
-    } else if (res.status === 401) {
-      return ERROR_MESSAGES.unathorization
-    }
-
-    return ERROR_MESSAGES.create
+    return "Добавление успешно"
   } catch (error) {
-    console.error(error)
+    console.error(`Ошибка в addCategory: ${error}`)
     return ERROR_MESSAGES.create
   }
 }
 
-export const deleteCategory = async (id: string) => {
+// Функция для удаления категории
+export const deleteCategory = async (id: string): Promise<string> => {
   try {
-    console.log(`Удаление ${id}`)
+    await fetchWithAuth(
+      getEndpoint(API.categories.delete(id), true),
+      "DELETE"
+    )
+    revalidateTag(categoryTag)
+    return "Удаление успешно"
   } catch (error) {
-    console.error(error)
+    console.error(`Ошибка в deleteCategory: ${error}`)
     return ERROR_MESSAGES.delete
   }
 }

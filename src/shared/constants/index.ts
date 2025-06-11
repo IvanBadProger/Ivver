@@ -16,3 +16,9 @@ export enum ROUTES {
   AUTH = "/admin/auth",
   DASHBOARD = "/admin/dashboard",
 }
+
+export enum MESSAGES {
+  unauthorized = "Вы не авторизованы!",
+}
+
+export const MAIN_TOAST_CONTAINER_ID = "main-container-toast"

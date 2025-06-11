@@ -1,4 +1,4 @@
-import { getCategories } from "../api"
+import { getCategories } from "../../api"
 import { CategoryTable } from "./CategoryTable"
 
 export const CategoriesTableContainer = async () => {

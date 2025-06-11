@@ -1,13 +1,11 @@
 "use client"
-import { Modal, Table, useModal } from "@/shared/ui"
-import { CategoryDTO } from "../types"
+import { Table, useModal } from "@/shared/ui"
+import { CategoryDTO } from "../../types"
 import { CategoryRow } from "./CategoryRow"
-const CategoryForm = dynamic(() => import("./CategoryForm"), {
-  ssr: false,
-})
 import { useState } from "react"
 import { WithId } from "@/shared/types"
-import dynamic from "next/dynamic"
+import { HEADER_COLS } from "./constants"
+import { CategoryEditor } from "../CategoryEditor"
 
 type CategoryTableProps = {
   categories: WithId<CategoryDTO>[]
@@ -26,29 +24,23 @@ export const CategoryTable = ({ categories }: CategoryTableProps) => {
   return (
     <>
       <Table className="w-full">
-        <Table.Header columns={["Название", "Описание"]} />
+        <Table.Header columns={HEADER_COLS} />
         <Table.Body>
           {categories.map((category) => (
             <CategoryRow
               onClick={onClick}
               key={category.id}
-              data={category}
+              rowData={category}
             />
           ))}
         </Table.Body>
       </Table>
 
-      <Modal
+      <CategoryEditor
         ref={dialogRef}
-        onClose={closeModal}
-        label="Редактирование категории"
-      >
-        <CategoryForm
-          isEdit
-          category={selectedCategory}
-          onSubmitExtra={closeModal}
-        />
-      </Modal>
+        categoryData={selectedCategory}
+        closeModal={closeModal}
+      />
     </>
   )
 }

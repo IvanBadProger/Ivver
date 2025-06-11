@@ -2,8 +2,12 @@ import { ROUTES } from "@/shared/constants"
 import { NavLink } from "./NavLink"
 import { AdminNavigation } from "./AdminLinks"
 import { ContactInfo } from "./ContactInfo"
+import { getToken } from "@/shared/utils"
 
-export const Header = ({ token }: { token?: string }) => {
+export const Header = async ({ token }: { token?: string }) => {
+  const isAdminView =
+    process.env.NODE_ENV !== "production" || (await getToken())
+
   return (
     <header className="bg-gradient-to-r from-primary-700 to-secondary-800 shadow-lg">
       <nav className="container mx-auto p-4">
@@ -13,11 +17,7 @@ export const Header = ({ token }: { token?: string }) => {
           </NavLink>
 
           <div className="flex items-center gap-6">
-            {process.env.NODE_ENV !== "production" && (
-              <>
-                <AdminNavigation token={token} />
-              </>
-            )}
+            {isAdminView && <AdminNavigation token={token} />}
           </div>
 
           <ContactInfo />

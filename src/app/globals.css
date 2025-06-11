@@ -34,17 +34,12 @@ html {
   }
 }
 
-@media (max-width: 767px) {
-  html {
-    font-size: 14px;
-  }
-}
-
 body {
   background: rgb(245, 238, 224);
   color: black;
-  font-family: --font-nunito-sans;
+  font-family: var(--primary-font);
 }
+
 body:has(dialog[open]) {
   overflow: hidden;
 }

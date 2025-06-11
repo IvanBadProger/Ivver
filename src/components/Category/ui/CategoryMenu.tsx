@@ -6,32 +6,22 @@ type CategoryMenuProps = {
   activeCategory: string
 }
 
+const createMenuItem = (value: string, name: string) => {
+  return new MenuItem({
+    value,
+    paramName: "category",
+    pathname: "",
+    label: name,
+  })
+}
+
 export const CategoryMenu = (props: CategoryMenuProps) => {
   const { categories, activeCategory } = props
 
-  // fix: надо как-то переработать этот момент
-  const menuItems = categories.map(
-    ({ name, id }) =>
-      new MenuItem({
-        value: id,
-        label: name,
-        paramName: "category",
-        pathname: "",
-      })
-  )
+  const menuItems = [
+    createMenuItem("all", "Все"),
+    ...categories.map(({ id, name }) => createMenuItem(id, name)),
+  ]
 
-  return (
-    <Menu
-      menuItems={[
-        new MenuItem({
-          value: "all",
-          label: "Все",
-          paramName: "category",
-          pathname: "",
-        }),
-        ...menuItems,
-      ]}
-      activeValue={activeCategory}
-    />
-  )
+  return <Menu menuItems={menuItems} activeValue={activeCategory} />
 }

@@ -10,8 +10,16 @@ export const ButtonCreateCategory = () => {
   const { openModal, dialogRef, closeModal } = useModal()
   const formRef = useRef<HTMLFormElement>(null)
 
-  const onClose = () => {
-    formRef.current?.reset()
+  const resetCategoryForm = () => {
+    const formElement = formRef.current
+
+    if (formElement && formElement instanceof HTMLFormElement) {
+      formElement.reset()
+    }
+  }
+
+  const onModalClose = () => {
+    resetCategoryForm()
     closeModal()
   }
 
@@ -19,9 +27,8 @@ export const ButtonCreateCategory = () => {
     <>
       <Button onClick={openModal}>Добавить категорию</Button>
       <Modal
-        isLabelHidden
         label="Создание категории"
-        onClose={onClose}
+        onClose={onModalClose}
         ref={dialogRef}
       >
         <CategoryForm ref={formRef} onSubmitExtra={closeModal} />

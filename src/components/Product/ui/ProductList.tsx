@@ -18,7 +18,7 @@ export const ProductList = (props: ProductListProps) => {
   return (
     <div
       className={clsx(
-        "grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full",
+        "grid sm:grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full grid-cols-1 min-h-screen",
         className
       )}
     >
@@ -33,7 +33,7 @@ export const ProductList = (props: ProductListProps) => {
               price={price}
               preview_photo_url={preview_photo_url}
               id={id}
-              className="justify-self-center"
+              className="justify-self-center max-h-[450px]"
             />
           )
         }

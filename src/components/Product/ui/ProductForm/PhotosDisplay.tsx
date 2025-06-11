@@ -42,7 +42,13 @@ export const PhotosDisplay = ({
                 width={imageSize}
                 height={imageSize}
               />
+              {/* fix: label понятный дать */}
               <Button
+                label={
+                  isSelected
+                    ? "Убрать отметку об удалении"
+                    : "Пометить на удаление"
+                }
                 mode={isSelected ? "danger-fill" : "danger"}
                 onClick={() => onClick(id)}
                 aria-pressed={isSelected}
