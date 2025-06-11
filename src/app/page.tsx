@@ -21,13 +21,15 @@ export default async function Home({ searchParams }: Props) {
         <ClientSidebar activeCategory={category} />
       </Suspense>
       <Suspense fallback={<Loading />}>
-        <div className="w-full flex flex-col gap-y-4">
+        <div className="w-full flex flex-col gap-y-8">
           <ProductList className="shrink grow" products={products} />
-          <ProductsPagination
-            {...paginator}
-            category={category}
-            baseUrl="/"
-          />
+          {!!products.length && paginator.last_page !== 1 && (
+            <ProductsPagination
+              {...paginator}
+              category={category}
+              baseUrl="/"
+            />
+          )}
         </div>
       </Suspense>
     </section>

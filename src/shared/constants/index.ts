@@ -22,3 +22,4 @@ export enum MESSAGES {
 }
 
 export const MAIN_TOAST_CONTAINER_ID = "main-container-toast"
+export const TOAST_REMOVE_PRODUCT_ID = "toast-remove-product"

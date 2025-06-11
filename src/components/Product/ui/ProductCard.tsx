@@ -15,7 +15,7 @@ export const ProductCard = (props: ProductCardProps) => {
   return (
     <article
       className={clsx(
-        "group relative overflow-hidden rounded-xl bg-white shadow-lg transition-all w-full hover:shadow-xl cursor-pointer",
+        "group relative overflow-hidden rounded-xl bg-white shadow-lg transition-all w-full hover:shadow-2xl cursor-pointer duration-200",
         className
       )}
     >
@@ -48,13 +48,13 @@ export const ProductCard = (props: ProductCardProps) => {
         <Badge text={category?.name} className="max-w-full w-fit" />
 
         <Title
-          size="lg"
-          className="text-gray-900 overflow-hidden line-clamp-4 max-h-[150px] shrink grow"
+          size="md"
+          className="text-gray-900 line-clamp-3 hyphens-auto min-h-12 shrink grow"
         >
           {name}
         </Title>
 
-        <span className="text-xl font-bold text-primary-600">
+        <span className="text-md md:text-xl truncate font-bold text-primary-600">
           {price} руб
         </span>
       </Link>

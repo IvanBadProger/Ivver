@@ -21,18 +21,19 @@ export async function generateMetadata({
   const product = await getProductById(id)
 
   if (!product) return {}
+  const { name, description, photos } = product
 
   return {
-    title: product.name,
-    description: product.description,
+    title: name,
+    description: description,
     openGraph: {
-      title: product.name,
-      description: product.description,
-      images: product.photos?.filter((img) => img.is_preview),
+      title: name,
+      description: description,
+      images: photos?.filter((img) => img.is_preview),
       locale: "ru_RU",
     },
     alternates: {
-      canonical: `/products/${product.id}`,
+      canonical: `/products/${id}`,
     },
   }
 }
@@ -51,15 +52,18 @@ export default async function ProductPage(props: PageProps) {
     photos: images,
     name,
     price,
-    measurement_unit: unit,
     specifications,
   } = product
 
   return (
     <section className="container mx-auto py-8 px-4">
-      <article className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-h-screen">
+      {/* grid grid-cols-1 lg:grid-cols-2 gap-8  */}
+      <article className="min-h-screen">
         <Suspense fallback={<Loading />}>
-          <ImagesGallery images={images} />
+          <ImagesGallery
+            images={images}
+            className="float-left w-[50vw] mr-6!"
+          />
         </Suspense>
 
         {/* Информация о продукте */}
@@ -80,16 +84,10 @@ export default async function ProductPage(props: PageProps) {
               : "У этого товара нет описания"}
           </p>
 
-          <dl className="space-y-2 border-t border-gray-300 pt-4">
-            <div className="flex items-center justify-between">
-              <dt className="text-sm text-gray-500">Цена:</dt>
-              <dd className="text-xl font-bold text-secondary-600">
-                <span>{price}</span>
-                <span content="RUB">&nbsp;₽</span>
-                {unit && <span>&nbsp;/ {unit.name}</span>}
-              </dd>
-            </div>
-          </dl>
+          <div className="text-xl text-right font-bold text-secondary-600">
+            <span>{price}</span>
+            <span content="RUB">&nbsp;₽</span>
+          </div>
 
           {!!specifications?.length && (
             <ProductSpecifications specifications={specifications} />
@@ -100,24 +98,31 @@ export default async function ProductPage(props: PageProps) {
   )
 }
 
-const ImagesGallery = ({ images }: { images?: ProductPhoto[] }) => {
+const ImagesGallery = ({
+  images,
+  className,
+}: {
+  images?: ProductPhoto[]
+  className?: string
+}) => {
   if (images?.length) {
     const sortedImages = images.toSorted(
       (a, b) => (b.is_preview ? 1 : 0) - (a.is_preview ? 1 : 0)
     )
 
     return (
-      <Slider className="h-[75dvh] aspect-square">
+      <Slider className={className}>
         {sortedImages.map((img, index) => (
           <Image
+            className="object-contain w-full h-auto"
             key={img.id}
             src={img.url}
             alt={`Изображение товара ${index + 1} из ${
               images.length
             }`}
-            fill
-            // width={400}
-            // height={400}
+            // fill
+            width={400}
+            height={400}
             priority={index === 0}
             sizes="(max-width: 768px) 100vw, 50vw"
             loading={index === 0 ? "eager" : "lazy"}
@@ -130,7 +135,7 @@ const ImagesGallery = ({ images }: { images?: ProductPhoto[] }) => {
   } else {
     return (
       <Image
-        className="w-full aspect-square"
+        className={className}
         src={noImage}
         alt="У товара нет изображений"
         width={400}

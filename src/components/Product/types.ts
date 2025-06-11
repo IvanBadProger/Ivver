@@ -33,7 +33,26 @@ export const ProductSchema = z.object({
     id: z.string().nonempty(),
     name: z.string().nonempty(),
   }),
-  price: z.string().transform((val) => parseFloat(val).toFixed(2)),
+  // price: z.string().transform((val) => parseFloat(val).toFixed(2)),
+  // price: z.coerce
+  //   .number()
+  //   .positive("Цена должна быть больше 0")
+  //   .transform((val) => {
+  //     return val.toFixed(2)
+  //   }),
+  price: z
+    .string()
+    .nonempty("Введите цену")
+    .refine(
+      (val) => {
+        const valueAsNumber = parseFloat(val)
+        return !isNaN(valueAsNumber) && valueAsNumber > 0
+      },
+      {
+        message: "Значение должно быть корректным числом больше 0",
+      }
+    )
+    .transform((val) => parseFloat(val).toFixed(2)),
   photos: z.array(photoSchema).optional(),
   measurement_unit_id: z.string().optional(),
   measurement_unit: MeasurementUnitDTOSchema.optional(),

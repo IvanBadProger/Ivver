@@ -17,7 +17,7 @@ export const Slider = (props: SliderProps) => {
 
   return (
     <Swiper
-      className={clsx("w-full select-none", className)}
+      className={clsx("select-none", className)}
       navigation
       pagination={{ type: "bullets", clickable: true }}
       modules={[Pagination, Navigation]}

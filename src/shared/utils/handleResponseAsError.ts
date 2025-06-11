@@ -13,9 +13,11 @@ export const handleResponseAsError = async (
       case 401:
         return { message: "Ошибка авторизации" }
       case 400:
+        const data = await res.json()
+        console.error(data)
         return {
           message: "Ошибка валидации",
-          serverData: await res.json(),
+          serverData: data,
         }
 
       default:

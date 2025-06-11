@@ -19,7 +19,7 @@ export const Menu = (props: MenuProps) => {
           <li key={index}>
             <Link
               className={clsx(
-                "block px-4 py-2 transition-colors hover:bg-primary-200 hover:text-black",
+                "block px-4 py-2 transition-colors hover:bg-primary-200 hover:text-black line-clamp-2",
                 isActive
                   ? "text-gray-900 bg-primary-100"
                   : "text-gray-600"

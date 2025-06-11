@@ -12,13 +12,13 @@ export const ProductList = (props: ProductListProps) => {
   const { products, className } = props
 
   if (!products.length) {
-    return <p className="text-center">Товаров нет</p>
+    return <p className="text-center mx-auto">Товаров нет</p>
   }
 
   return (
     <div
       className={clsx(
-        "grid sm:grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full grid-cols-1 min-h-screen",
+        "lg:grid-cols-4 gap-4 w-full min-h-screen grid grid-cols-2",
         className
       )}
     >
@@ -33,7 +33,7 @@ export const ProductList = (props: ProductListProps) => {
               price={price}
               preview_photo_url={preview_photo_url}
               id={id}
-              className="justify-self-center max-h-[450px]"
+              className="max-h-[300px] md:max-h-[500px] max-w-[300px]"
             />
           )
         }

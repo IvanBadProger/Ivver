@@ -23,7 +23,7 @@ export const NavLink = ({
       "px-4 py-2 transition-colors duration-200 flex items-center gap-2",
       isDark
         ? "text-primary-800 hover:bg-primary-100"
-        : "text-primary-50 hover:text-primary-200",
+        : "text-black hover:text-gray-600",
       className
     )}
   >

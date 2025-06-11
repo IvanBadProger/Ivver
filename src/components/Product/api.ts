@@ -12,13 +12,10 @@ enum MESSAGES {
   createSuccess = "Добавление товара успешно",
   unathorization = "Вы не авторизованы! ",
   uploadPhotoError = "Ошибка при добавлении фото",
-  uploadPhotoSuccess = "Добавление фото успешно",
   validatePhotoError = "Валидация фото не прошло",
   uploadPreviewError = "Ошибка при добавлении превью",
-  uploadPreviewSuccess = "Добавление превью успешно",
   uploadPreviewValidation = "Валидация превью не прошло",
   removePhotoError = "Ошибка при удалении фото",
-  removePhotoSuccess = "Удаление фото успешно",
   removePhotoValidation = "Валидация не прошла при удалении фото",
   updateSuccess = "Успешное обновление товара",
   updateError = "Ошибка при обновлении товара",
@@ -30,23 +27,34 @@ type ProductResponse = {
   data?: Record<string, any>
 }
 
+type GetProductOptions = {
+  isAdmin?: boolean
+}
+
 export async function getProducts(
   category: string = "all",
-  page: string = "1"
+  page: string = "1",
+  options?: GetProductOptions
 ): Promise<Paginator> {
+  const { isAdmin } = options ?? {}
+
   try {
-    const res = await fetch(
-      getEndpoint(
-        API.products.getAll(
-          category === "all" ? "" : category,
-          page === "1" ? "" : page
-        )
+    const url = getEndpoint(
+      API.products.getAll(
+        category === "all" ? "" : category,
+        page === "1" ? "" : page
       ),
-      {
-        cache: "force-cache",
-        next: { tags: ["products"], revalidate: 3600 },
-      }
+      isAdmin
     )
+    const res = isAdmin
+      ? await fetchWithAuth(url, "GET", undefined, {
+          cache: "force-cache",
+          next: { tags: ["products"], revalidate: 3600 },
+        })
+      : await fetch(url, {
+          cache: "force-cache",
+          next: { tags: ["products"], revalidate: 3600 },
+        })
     const data = await res.json()
 
     return data
@@ -125,7 +133,7 @@ export async function uploadPhotos(
       (await handleResponseAsError(res)) ?? {}
 
     return {
-      message: message ?? MESSAGES.uploadPhotoSuccess,
+      message: message ?? "",
       data: serverData,
     }
   } catch (error) {
@@ -151,7 +159,7 @@ export async function uploadPreviewPhoto(
       (await handleResponseAsError(res)) ?? {}
 
     return {
-      message: message ?? MESSAGES.uploadPreviewSuccess,
+      message: message ?? "",
       data: serverData,
     }
   } catch (error) {
@@ -175,7 +183,7 @@ export async function removeProductPhotos(
       (await handleResponseAsError(res)) ?? {}
 
     return {
-      message: message ?? MESSAGES.removePhotoSuccess,
+      message: message ?? "",
       data: serverData,
     }
   } catch (error) {

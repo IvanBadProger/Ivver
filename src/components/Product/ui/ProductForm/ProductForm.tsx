@@ -161,7 +161,9 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
       }
 
       if (isEdit && productId) {
-        messages.push((await updateProduct(productId, data)).message)
+        console.log(data)
+        const updateResponse = await updateProduct(productId, data)
+        messages.push(updateResponse.message)
 
         if (deletePhotosIds.length) {
           messages.push(
@@ -203,7 +205,7 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
         onSubmitExtra()
       }
 
-      toast(messages.join(" "), {
+      toast(messages.join("\n"), {
         containerId: MAIN_TOAST_CONTAINER_ID,
       })
 
@@ -238,6 +240,7 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
               {...register("price")}
               label="Цена"
               type="number"
+              step={0.0001}
               errorMessage={errors.price?.message}
             />
 
@@ -281,7 +284,7 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
               />
             )}
 
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" isLoading={isSubmitting}>
               {isEdit ? "Сохранить" : "Создать"}
             </Button>
           </fieldset>

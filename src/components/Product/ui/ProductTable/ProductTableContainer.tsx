@@ -1,5 +1,5 @@
-import { getProducts } from "../api"
-import { ProductsPagination } from "./ProductsPagination"
+import { getProducts } from "../../api"
+import { ProductsPagination } from "../ProductsPagination"
 import { ProductTable } from "./ProductTable"
 
 export const ProductTableContainer = async ({
@@ -7,11 +7,15 @@ export const ProductTableContainer = async ({
 }: {
   page: string
 }) => {
-  const { data: products, ...paginator } = await getProducts("", page)
+  const { data: products, ...paginator } = await getProducts(
+    "",
+    page,
+    { isAdmin: true }
+  )
 
   return (
     <>
-      <ProductTable products={products} />
+      <ProductTable products={products ?? []} />
       <ProductsPagination
         {...paginator}
         category=""

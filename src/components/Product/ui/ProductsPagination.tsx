@@ -31,12 +31,12 @@ export const ProductsPagination = async (
     baseUrl,
   } = props
 
-  const generateHref = (page: number) => {
+  const generateHref = (page: number = 1) => {
     const params = new URLSearchParams({
       page: page.toString(),
     })
-
     const hasCategory = category
+
     if (hasCategory) {
       params.append("category", category)
     }
@@ -50,6 +50,13 @@ export const ProductsPagination = async (
     <div className="flex flex-col gap-y-1 items-center">
       <div className="flex items-center gap-x-2">
         <PageButton
+          href={generateHref(1)}
+          label={LABELS.firstPage}
+          isDisabled={isDisabled(1)}
+        >
+          1
+        </PageButton>
+        <PageButton
           href={generateHref(current_page - 1)}
           label={LABELS.prevPage}
           isDisabled={!prev_page_url}
@@ -57,25 +64,12 @@ export const ProductsPagination = async (
           <ArrowLeft />
         </PageButton>
 
-        <PageButton
-          href={generateHref(1)}
-          label={LABELS.firstPage}
-          isDisabled={isDisabled(1)}
-        >
-          1
-        </PageButton>
-
-        <span className="text-secondary-700 mx-5">
-          {current_page}
+        <span className="mx-5 text-gray-500">
+          страница&nbsp;
+          <span className="text-gray-600">{current_page}</span>
+          &nbsp;из&nbsp;
+          <span className="text-gray-600">{last_page}</span>
         </span>
-
-        <PageButton
-          href={generateHref(last_page)}
-          label={LABELS.lastPage}
-          isDisabled={isDisabled(last_page)}
-        >
-          {last_page}
-        </PageButton>
 
         <PageButton
           href={generateHref(current_page + 1)}
@@ -83,6 +77,14 @@ export const ProductsPagination = async (
           isDisabled={!next_page_url}
         >
           <ArrowRight />
+        </PageButton>
+
+        <PageButton
+          href={generateHref(last_page)}
+          label={LABELS.lastPage}
+          isDisabled={isDisabled(last_page)}
+        >
+          {last_page}
         </PageButton>
       </div>
     </div>
@@ -108,7 +110,7 @@ const PageButton = ({
       aria-label={label}
       aria-disabled={isDisabled}
       className={clsx(
-        "text-primary-500",
+        "text-primary-500 rounded-full px-4 py-2 bg-white text-center border border-gray-200",
         isDisabled
           ? "opacity-50 cursor-not-allowed pointer-events-none"
           : "hover:text-primary-600 transition-colors duration-150 ease-in-out"
