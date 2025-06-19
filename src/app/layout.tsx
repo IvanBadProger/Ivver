@@ -19,12 +19,26 @@ export const metadata: Metadata = {
     default: "Ivver | Магазин автохимии",
   },
   description: "Интернет магазин по продаже автохимии",
+
   openGraph: {
     title: {
       template: "%s | Ivver",
       default: "Ivver | Магазин автохимии",
     },
+    url: "https://ivver.ru",
+    images: [
+      {
+        url: "https://ivver.ru/logo.svg",
+        width: 220,
+        height: 76,
+        alt: "",
+      },
+    ],
     description: "Интернет магазин по продаже автохимии",
+    type: "website",
+  },
+  icons: {
+    icon: "/favicon.ico",
   },
 }
 
