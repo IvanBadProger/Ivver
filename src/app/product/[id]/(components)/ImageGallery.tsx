@@ -19,7 +19,7 @@ export const ImagesGallery = ({
       <Slider className={className}>
         {sortedImages.map((img, index) => (
           <Image
-            className="object-contain w-full h-auto"
+            className="object-contain w-full"
             key={img.id}
             src={img.url}
             alt={`Изображение товара ${index + 1} из ${

@@ -28,7 +28,17 @@ export async function generateMetadata({
     openGraph: {
       title: name,
       description: description,
-      images: photos?.filter((img) => img.is_preview)[0].url,
+      images: [
+        {
+          url:
+            photos?.filter((img) => img.is_preview)[0]?.url ??
+            "https://ivver.ru/logo.svg",
+          width: 200,
+          height: 200,
+          alt: "",
+        },
+      ],
+
       url: `https://ivver.ru/products/${id}`,
     },
   }
@@ -64,7 +74,6 @@ export default async function ProductPage({ params }: PageProps) {
         </Suspense>
 
         <ProductInfo
-          className=""
           description={description}
           id={productId}
           name={name}
