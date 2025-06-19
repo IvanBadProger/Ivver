@@ -33,13 +33,12 @@ export async function generateMetadata({
           url:
             photos?.filter((img) => img.is_preview)[0]?.url ??
             "https://ivver.ru/logo.svg",
-          width: 200,
-          height: 200,
+          width: 1200,
+          height: 1200,
           alt: "",
         },
       ],
-
-      url: `https://ivver.ru/products/${id}`,
+      url: `https://ivver.ru/product/${id}`,
     },
   }
 }
