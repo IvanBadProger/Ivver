@@ -24,15 +24,12 @@ export async function generateMetadata({
   return {
     title: name,
     description: description ?? "",
+
     openGraph: {
       title: name,
       description: description,
-      images: photos?.filter((img) => img.is_preview),
-      locale: "ru_RU",
+      images: photos?.filter((img) => img.is_preview)[0].url,
       url: `https://ivver.ru/products/${id}`,
-    },
-    alternates: {
-      canonical: `/products/${id}`,
     },
   }
 }
