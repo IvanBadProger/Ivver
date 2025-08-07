@@ -1,16 +1,16 @@
 import type { Metadata } from "next"
-import { Lato } from "next/font/google"
+import { Rubik } from "next/font/google"
 import "./globals.css"
 import { Footer, Header } from "@/widgets"
 import clsx from "clsx"
-import { cookies } from "next/headers"
 import { ToastContainer } from "react-toastify"
 import { MAIN_TOAST_CONTAINER_ID } from "@/shared/constants"
+import { getToken } from "@/shared/utils"
 
-const nunitoSans = Lato({
+const font = Rubik({
   variable: "--primary-font",
   subsets: ["latin"],
-  weight: ["100", "300", "400", "700", "900"],
+  weight: ["300", "400", "700", "500"],
 })
 
 export const metadata: Metadata = {
@@ -19,33 +19,49 @@ export const metadata: Metadata = {
     default: "Ivver | Магазин автохимии",
   },
   description: "Интернет магазин по продаже автохимии",
+
   openGraph: {
     title: {
       template: "%s | Ivver",
       default: "Ivver | Магазин автохимии",
     },
+    url: "https://ivver.ru",
+    images: [
+      {
+        url: "https://ivver.ru/logo.svg",
+        width: 220,
+        height: 76,
+        alt: "",
+      },
+    ],
     description: "Интернет магазин по продаже автохимии",
+    type: "website",
+  },
+  icons: {
+    icon: "/favicon.ico",
   },
 }
 
+type RootLayoutProps = Readonly<{
+  children: React.ReactNode
+}>
+
 export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
-  const cookieStore = await cookies()
-  const token = cookieStore.get("token")?.value
+}: RootLayoutProps) {
+  const token = await getToken()
 
   return (
     <html lang="ru">
       <body
         className={clsx(
-          nunitoSans.variable,
-          "antialiased flex flex-col min-h-screen overflow-x-hidden"
+          font.variable,
+          "antialiased flex flex-col min-h-screen overflow-x-hidden",
+          "bg-gradient-to-br from-primary-50 to-secondary-50"
         )}
       >
         <Header token={token} />
-        <main className="shrink grow my-8">{children}</main>
+        <main className="shrink grow my-6">{children}</main>
         <Footer />
         <ToastContainer
           containerId={MAIN_TOAST_CONTAINER_ID}

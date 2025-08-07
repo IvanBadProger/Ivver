@@ -1,24 +1,21 @@
 "use server"
 import { API, getEndpoint } from "@/shared/constants"
-import { Product } from "./types"
-import { ProductForm } from "./ui/ProductForm/types"
-import { revalidateTag } from "next/cache"
 import { Paginator } from "@/shared/types"
 import { fetchWithAuth } from "@/shared/utils"
 import { handleResponseAsError } from "@/shared/utils/handleResponseAsError"
+import { revalidateTag } from "next/cache"
+import { Product } from "./types"
+import { ProductForm } from "./ui/ProductForm/types"
 
 enum MESSAGES {
   createError = "Ошибка при добавлении товара",
   createSuccess = "Добавление товара успешно",
   unathorization = "Вы не авторизованы! ",
   uploadPhotoError = "Ошибка при добавлении фото",
-  uploadPhotoSuccess = "Добавление фото успешно",
   validatePhotoError = "Валидация фото не прошло",
   uploadPreviewError = "Ошибка при добавлении превью",
-  uploadPreviewSuccess = "Добавление превью успешно",
   uploadPreviewValidation = "Валидация превью не прошло",
   removePhotoError = "Ошибка при удалении фото",
-  removePhotoSuccess = "Удаление фото успешно",
   removePhotoValidation = "Валидация не прошла при удалении фото",
   updateSuccess = "Успешное обновление товара",
   updateError = "Ошибка при обновлении товара",
@@ -30,23 +27,33 @@ type ProductResponse = {
   data?: Record<string, any>
 }
 
+type GetProductOptions = {
+  isAdmin?: boolean
+}
+
 export async function getProducts(
   category: string = "all",
-  page: string = "1"
+  page: string = "1",
+  options?: GetProductOptions
 ): Promise<Paginator> {
+  const { isAdmin } = options ?? {}
+
   try {
-    const res = await fetch(
-      getEndpoint(
-        API.products.getAll(
-          category === "all" ? "" : category,
-          page === "1" ? "" : page
-        )
-      ),
-      {
-        cache: "force-cache",
-        next: { tags: ["products"], revalidate: 3600 },
-      }
+    const url = getEndpoint(
+      API.products.getAll(category === "all" ? "" : category, page === "1" ? "" : page),
+      isAdmin
     )
+
+    const res = isAdmin
+      ? await fetchWithAuth(url, "GET", undefined, {
+          cache: "force-cache",
+          next: { tags: ["products"], revalidate: 3600 },
+        })
+      : await fetch(url, {
+          cache: "force-cache",
+          next: { tags: ["products"], revalidate: 3600 },
+        })
+
     const data = await res.json()
 
     return data
@@ -67,9 +74,7 @@ export async function getProducts(
   }
 }
 
-export async function getProductById(
-  id: string
-): Promise<Product | void> {
+export async function getProductById(id: string): Promise<Product | void> {
   try {
     const res = await fetch(getEndpoint(API.products.getById(id)), {
       cache: "force-cache",
@@ -83,9 +88,7 @@ export async function getProductById(
   }
 }
 
-export async function addProduct(
-  product: ProductForm
-): Promise<ProductResponse> {
+export async function addProduct(product: ProductForm): Promise<ProductResponse> {
   try {
     const res = await fetchWithAuth(
       getEndpoint(API.products.add(), true),
@@ -95,8 +98,7 @@ export async function addProduct(
 
     revalidateTag("products")
 
-    const { message, serverData } =
-      (await handleResponseAsError(res)) ?? {}
+    const { message, serverData } = (await handleResponseAsError(res)) ?? {}
 
     return {
       message: message ?? MESSAGES.createSuccess,
@@ -108,10 +110,7 @@ export async function addProduct(
   }
 }
 
-export async function uploadPhotos(
-  photos: FormData,
-  id: string
-): Promise<ProductResponse> {
+export async function uploadPhotos(photos: FormData, id: string): Promise<ProductResponse> {
   try {
     const res = await fetchWithAuth(
       getEndpoint(API.products.uploadPhotos(id), true),
@@ -121,11 +120,10 @@ export async function uploadPhotos(
 
     revalidateTag("products")
 
-    const { message, serverData } =
-      (await handleResponseAsError(res)) ?? {}
+    const { message, serverData } = (await handleResponseAsError(res)) ?? {}
 
     return {
-      message: message ?? MESSAGES.uploadPhotoSuccess,
+      message: message ?? "",
       data: serverData,
     }
   } catch (error) {
@@ -134,10 +132,7 @@ export async function uploadPhotos(
   }
 }
 
-export async function uploadPreviewPhoto(
-  preview: FormData,
-  id: string
-): Promise<ProductResponse> {
+export async function uploadPreviewPhoto(preview: FormData, id: string): Promise<ProductResponse> {
   try {
     const res = await fetchWithAuth(
       getEndpoint(API.products.uploadPreview(id), true),
@@ -147,11 +142,10 @@ export async function uploadPreviewPhoto(
 
     revalidateTag("products")
 
-    const { message, serverData } =
-      (await handleResponseAsError(res)) ?? {}
+    const { message, serverData } = (await handleResponseAsError(res)) ?? {}
 
     return {
-      message: message ?? MESSAGES.uploadPreviewSuccess,
+      message: message ?? "",
       data: serverData,
     }
   } catch (error) {
@@ -160,9 +154,7 @@ export async function uploadPreviewPhoto(
   }
 }
 
-export async function removeProductPhotos(
-  photosUrl: string[]
-): Promise<ProductResponse> {
+export async function removeProductPhotos(photosUrl: string[]): Promise<ProductResponse> {
   try {
     const res = await fetchWithAuth(
       getEndpoint(API.products.removePhotos, true),
@@ -171,11 +163,10 @@ export async function removeProductPhotos(
     )
 
     revalidateTag("products")
-    const { message, serverData } =
-      (await handleResponseAsError(res)) ?? {}
+    const { message, serverData } = (await handleResponseAsError(res)) ?? {}
 
     return {
-      message: message ?? MESSAGES.removePhotoSuccess,
+      message: message ?? "",
       data: serverData,
     }
   } catch (error) {
@@ -184,10 +175,7 @@ export async function removeProductPhotos(
   }
 }
 
-export async function updateProduct(
-  id: string,
-  data: ProductForm
-): Promise<ProductResponse> {
+export async function updateProduct(id: string, data: ProductForm): Promise<ProductResponse> {
   try {
     const res = await fetchWithAuth(
       getEndpoint(API.products.update(id), true),
@@ -196,8 +184,7 @@ export async function updateProduct(
     )
 
     revalidateTag("products")
-    const { message, serverData } =
-      (await handleResponseAsError(res)) ?? {}
+    const { message, serverData } = (await handleResponseAsError(res)) ?? {}
 
     return {
       message: message ?? MESSAGES.updateSuccess,
@@ -209,18 +196,12 @@ export async function updateProduct(
   }
 }
 
-export async function removeProduct(
-  id: string
-): Promise<ProductResponse> {
+export async function removeProduct(id: string): Promise<ProductResponse> {
   try {
-    const res = await fetchWithAuth(
-      getEndpoint(API.products.remove(id), true),
-      "DELETE"
-    )
+    const res = await fetchWithAuth(getEndpoint(API.products.remove(id), true), "DELETE")
 
     revalidateTag("products")
-    const { message, serverData } =
-      (await handleResponseAsError(res)) ?? {}
+    const { message, serverData } = (await handleResponseAsError(res)) ?? {}
 
     return { message: message ?? "Товар удален", data: serverData }
   } catch (error) {

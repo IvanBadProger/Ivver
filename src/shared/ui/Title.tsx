@@ -37,11 +37,11 @@ interface TitleProps
 
 const TITLE_SIZE_STYLES = {
   xs: "text-base",
-  sm: "text-lg md:text-base",
-  md: "text-xl md:text-lg",
-  lg: "text-2xl md:text-xl",
-  xl: "text-3xl md:text-2xl",
-  "2xl": "text-4xl md:text-3xl",
+  sm: "text-base md:text-lg",
+  md: "text-lg md:text-xl",
+  lg: "text-xl md:text-2xl",
+  xl: "text-2xl md:text-3xl",
+  "2xl": "text-3xl md:text-4xl",
 } as const
 
 const TITLE_TAG_NAME_BY_SIZE = {

@@ -59,11 +59,11 @@ export const logout = async (token: string): Promise<string> => {
   try {
     await fetchWithAuth(getEndpoint(API.admin.logout), "DELETE")
 
-    await deleteTokenInCookie()
-
     return MESSAGES.logoutSuccess
   } catch (error) {
     console.error(error)
     return MESSAGES.generalError
+  } finally {
+    await deleteTokenInCookie()
   }
 }
